@@ -19,21 +19,13 @@ class weapon {
     par.inv.push(this);
     var idd = par.inv.length-1 + "";
     var iddd = idd+"content";
-    addelement(document.getElementById("inv"),"div","card",idd);
+    addelement(document.getElementById("invw"),"div","card",idd,null);
     addelement(document.getElementById(idd),"div","card-header",null,this.name);
     addelement(document.getElementById(idd),"div","card-content",iddd);
     addelement(document.getElementById(iddd),"div","card-content-inner",null,"Damage: " + this.dam + "<br/>Swing Speed: " + this.swing + "<br/>DPS: " + this.damps);
   }
 }
-function randint(min, max) {
-	min = Math.ceil(min);
-	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function randlist(list) {
-  return list[randint(0, list.length - 1)];
-}
-function addelement(par,type,clas,id=null,html=null) {
+function addelement(par,type,clas,id=null,html=null,parallax=null) {
   var ele = document.createElement(type);
   ele.setAttribute('class', clas);
   if (html != null) {
@@ -41,6 +33,9 @@ function addelement(par,type,clas,id=null,html=null) {
   }
   if (id != null) {
     ele.setAttribute('id', id);
+  }
+  if (parallax != null) {
+    ele.setAttribute("data-swiper-parallax", parallax)
   }
   par.appendChild(ele);
 }

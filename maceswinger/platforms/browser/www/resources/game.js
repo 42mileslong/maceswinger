@@ -1,4 +1,8 @@
 function gameloop() {
-  //var p = new player();
-  //document.getElementById("test").addEventListener("click", test);
+  ctx.fillStyle = 'rgba(0, 0, 0)';
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  if (p.state == "fight") {
+    ctx.drawImage(enemiesimg,curen.type[1]*11,0,11,23,0,0,110,230);
+  }
+  window.requestAnimationFrame(gameloop);
 }

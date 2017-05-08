@@ -34,21 +34,28 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body onresize = "resize()">
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
     <!-- Panels overlay-->
     <div class="panel-overlay"></div>
     <!-- Left panel with reveal effect-->
-    <div class="panel panel-left panel-reveal">
-        <div class="content-block" id = "inv">
-            <div class="card">
-              <div class = "card-header">Meme</div>
-              <div class = "card-content">
-                <div class = "card-content-inner">+20% memes</div>
+    <div class="panel panel-left panel-reveal" style="background-image:url(resources/chest.png);background-size:100%">
+
+          <div class="swiper-container" style='height:100%'>
+            <div class="swiper-wrapper">
+              <div class="swiper-slide" id="invw"></div>
+              <div class="swiper-slide" id="inva">
+                <div class="card">
+                  <div class = "card-header">Meme</div>
+                  <div class = "card-content">
+                    <div class = "card-content-inner">+20% memes</div>
+                  </div>
+                </div>
               </div>
             </div>
+          <div class="swiper-pagination"></div>
         </div>
     </div>
 
@@ -70,16 +77,14 @@
                     <div class="center sliding">Mace Swinger</div>
                 </div>
             </div>
-            <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
+            <!-- Pages container, because we udse fixed-through navbar and toolbar, it has additional appropriate classes-->
             <div class="pages navbar-through toolbar-through">
                 <!-- Page, "data-page" contains page name -->
                 <div data-page="index" class="page">
                     <!-- Scrollable page content -->
                     <div class="page-content">
                         <div class="content-block">
-                            <p>Page content goes hsdjhkere</p>
-                            <!-- Link to another page -->
-                            <a href="about.html">About app</a>
+                            <canvas id="screen"></canvas>
                             <p><a href="#" class="button" id="dodge" onclick = "">Dodge</a><a href="#" class="button" id="hit" onclick = "">Hit</a></p>
                         </div>
                     </div>
@@ -103,17 +108,40 @@
     <script type="text/javascript" src="resources/enemy.js"></script>
     <script type="text/javascript" src="resources/game.js"></script>
     <script type="text/javascript">
-      var no = 0;
+      var canvas = document.getElementById('screen');
+      var ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
       var p = new player();
-      function iterate() {
-        no++;
-        console.log("l")
-        document.getElementById("test").innerHTML = no;
-      }
+      var enemiesimg = new Image();
+      enemiesimg.src = "resources/enemies.png";
+      var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       function yep() {
         var kek = new weapon(5);
         kek.addtoinv(p);
       }
+      var myApp = new Framework7();
+      // Init slider and store its instance in mySwiper variable
+      var mySwiper = myApp.swiper('.swiper-container', {
+        pagination:'.swiper-pagination',
+        parallax: false
+      });
+      function randint(min, max) {
+      	min = Math.ceil(min);
+      	max = Math.floor(max);
+      	return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      function randlist(list) {
+        return list[randint(0, list.length - 1)];
+      }
+      function resize() {
+        if (canvas.width != window.innerWidth) {
+          canvas.width = Math.floor(window.innerWidth/2);
+        }
+        if (canvas.height != window.innerHeight) {
+          canvas.height = Math.floor(window.innerHeight/2);
+        }
+      }
+      resize();
       gameloop();
     </script>
 </body>

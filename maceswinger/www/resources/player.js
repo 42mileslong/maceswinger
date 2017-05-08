@@ -9,5 +9,6 @@ class player {
     var we = new weapon(0,"handz");
     we.addtoinv(this)
     this.weap = this.inv[0];
+    this.state = "fight";
   }
 }
