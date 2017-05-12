@@ -13,7 +13,10 @@
 .statusbar-overlay {
     background: #000000;
 }
-#dodge, #hit {
+/*Dark green 3e8e41
+Light green 4CAF50
+dark 383736 */
+.mashbut {
   display: inline-block;
   padding: 50px 25px 80px 25px;
   width: 50%;
@@ -22,16 +25,48 @@
   text-align: center;
   text-decoration: none;
   outline: none;
-  color: #fff;
+  color: whitesmoke;
   background-color: #4CAF50;
   border: none;
-  border-radius: 15px;
   box-shadow: 0 9px #999;
+  transition:         0.02s ease-in;
+  -o-transition:      0.02s ease-in;
+  -ms-transition:     0.02s ease-in;
+  -moz-transition:    0.02s ease-in;
+  -webkit-transition: 0.02s ease-in;
+  z-index: 1;
 }
-#dodge:active, #hit:active {
+.mashbut-reloading {
+  display: inline-block;
+  width:50%
+  content: "";
+  background: linear-gradient(to bottom, #383736 50%, #3e8e41 50%);
+  background: -webkit-linear-gradient(to bottom, #383736 50%, #3e8e41 50%);
+  background-size: 100% 200%;
+  background-position:left bottom;
   background-color: #3e8e41;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: -1;
+  transition:         0.4s ease-in;
+  -o-transition:      0.4s ease-in;
+  -ms-transition:     0.4s ease-in;
+  -moz-transition:    0.4s ease-in;
+  -webkit-transition: 0.4s ease-in;
+}
+.mashbut:active {
+  background-color: #383736;
   box-shadow: 0 5px #666;
   transform: translateY(4px);
+  -webkit-transform: translateY(4px);
+}
+.mashbut-reloading:active {
+  background-color: #383736;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+  -webkit-transform: translateY(4px);
 }
 canvas, img {
     image-rendering: optimizeSpeed;

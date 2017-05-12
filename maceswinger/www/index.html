@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://ajax.googleapis.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000">
 
 
     <!-- Required meta tags-->
@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body onresize = "resize()">
+<body>
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
@@ -85,7 +85,7 @@
                     <div class="page-content">
                         <div class="content-block">
                             <canvas id="screen"></canvas>
-                            <p><a href="#" class="button" id="dodge" onclick = "">Dodge</a><a href="#" class="button" id="hit" onclick = "">Hit</a></p>
+                            <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "">Hit</a></p>
                         </div>
                     </div>
                 </div>
@@ -100,6 +100,7 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
     <script type="text/javascript" src="js/my-app.js"></script>
@@ -108,6 +109,13 @@
     <script type="text/javascript" src="resources/enemy.js"></script>
     <script type="text/javascript" src="resources/game.js"></script>
     <script type="text/javascript">
+      var dodgebut = document.getElementById("dodge");
+      var hitbut = document.getElementById("hit");
+      dodgebut.addEventListener("webkitTransitionEnd",dodgeend);
+      dodgebut.addEventListener("transitionEnd",dodgeend);
+      hitbut.addEventListener("webkitTransitionEnd",hitend);
+      hitbut.addEventListener("transitionEnd",hitend);
+
       var canvas = document.getElementById('screen');
       var ctx = canvas.getContext('2d');
       ctx.imageSmoothingEnabled = false;
@@ -133,15 +141,23 @@
       function randlist(list) {
         return list[randint(0, list.length - 1)];
       }
-      function resize() {
-        if (canvas.width != window.innerWidth) {
-          canvas.width = Math.floor(window.innerWidth/2);
-        }
-        if (canvas.height != window.innerHeight) {
-          canvas.height = Math.floor(window.innerHeight/2);
-        }
+      function dodgeend() {
+        $("#dodge").removeClass("mashbut-reloading");
+        document.getElementById("dodge").innerHTML += "1";
       }
-      resize();
+      function hitend() {
+        $("#hit").removeClass("mashbut-reloading");
+      }
+      $(function() {
+        $("#dodge").mouseup(function() {
+          $("#dodge").toggleClass("mashbut-reloading");
+        });
+      });
+      $(function() {
+        $("#hit").mouseup(function() {
+          $("#hit").toggleClass("mashbut-reloading");
+        });
+      });
       gameloop();
     </script>
 </body>
