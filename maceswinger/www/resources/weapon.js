@@ -5,7 +5,7 @@ class weapon {
     this.lv = lv;
     if (name == "handz") {
       this.name = "handz"
-      this.swing = .5;
+      this.swing = 3;
     }
     else {
       this.type = randlist(types);
@@ -14,6 +14,7 @@ class weapon {
     }
     this.dam = (this.lv*2 + 4)*(Math.pow(this.swing,1.1)).toFixed(2);
     this.damps = (this.dam/this.swing).toFixed(2);
+    this.element = null;
   }
   addtoinv(par) {
     par.inv.push(this);
@@ -23,6 +24,7 @@ class weapon {
     addelement(document.getElementById(idd),"div","card-header",null,this.name);
     addelement(document.getElementById(idd),"div","card-content",iddd);
     addelement(document.getElementById(iddd),"div","card-content-inner",null,"Damage: " + this.dam + "<br/>Swing Speed: " + this.swing + "<br/>DPS: " + this.damps);
+    this.element = document.getElementById(idd);
   }
 }
 function addelement(par,type,clas,id=null,html=null,parallax=null) {

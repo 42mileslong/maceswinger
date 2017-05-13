@@ -18,8 +18,9 @@ Light green 4CAF50
 dark 383736 */
 .mashbut {
   display: inline-block;
-  padding: 50px 25px 80px 25px;
-  width: 50%;
+  padding: 80px 0px 80px 0px;
+  margin: 1%;
+  width: 48%;
   font-size: 24px;
   cursor: pointer;
   text-align: center;
@@ -35,13 +36,19 @@ dark 383736 */
   -moz-transition:    0.02s ease-in;
   -webkit-transition: 0.02s ease-in;
   z-index: 1;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+     -moz-user-select: none; /* Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+          user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome and Opera */
 }
 .mashbut-reloading {
   display: inline-block;
   width:50%
   content: "";
   background: linear-gradient(to bottom, #383736 50%, #3e8e41 50%);
-  background: -webkit-linear-gradient(to bottom, #383736 50%, #3e8e41 50%);
   background-size: 100% 200%;
   background-position:left bottom;
   background-color: #3e8e41;
@@ -62,12 +69,6 @@ dark 383736 */
   transform: translateY(4px);
   -webkit-transform: translateY(4px);
 }
-.mashbut-reloading:active {
-  background-color: #383736;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-  -webkit-transform: translateY(4px);
-}
 canvas, img {
     image-rendering: optimizeSpeed;
     image-rendering: -moz-crisp-edges;
@@ -75,4 +76,8 @@ canvas, img {
     image-rendering: optimize-contrast;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
+}
+.weapselected {
+  border-color: #4CAF50;
+  border-style: solid;
 }

@@ -1,3 +1,7 @@
+function init() {
+  p.equipweap(0);
+  window.requestAnimationFrame(gameloop);
+}
 function gameloop() {
   ctx.fillStyle = 'rgba(0, 0, 0)';
   ctx.fillRect(0,0,canvas.width,canvas.height)
@@ -16,4 +20,13 @@ function hit() {
       p.hit.ble = false;
     }
   }
+}
+function settransition(time,par) {
+  $("#" + par).css({
+    "transition": (time + "s ease-in"),
+    "-webkit-transition": (time + "s ease-in"),
+    "-moz-transition": (time + "s ease-in"),
+    "-ms-transition": (time + "s ease-in"),
+    "-o-transition": (time + "s ease-in"),
+  });
 }

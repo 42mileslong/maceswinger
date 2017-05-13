@@ -47,7 +47,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide" id="invw"></div>
               <div class="swiper-slide" id="inva">
-                <div class="card">
+                <div class="card weapselected">
                   <div class = "card-header">Meme</div>
                   <div class = "card-content">
                     <div class = "card-content-inner">+20% memes</div>
@@ -84,8 +84,8 @@
                     <!-- Scrollable page content -->
                     <div class="page-content">
                         <div class="content-block">
-                            <canvas id="screen"></canvas>
-                            <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "">Hit</a></p>
+                            <canvas id="screen" style="margin:0 auto" width="400" height = "400"></canvas>
+                            <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Hit</a>
                         </div>
                     </div>
                 </div>
@@ -111,10 +111,6 @@
     <script type="text/javascript">
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
-      dodgebut.addEventListener("webkitTransitionEnd",dodgeend);
-      dodgebut.addEventListener("transitionEnd",dodgeend);
-      hitbut.addEventListener("webkitTransitionEnd",hitend);
-      hitbut.addEventListener("transitionEnd",hitend);
 
       var canvas = document.getElementById('screen');
       var ctx = canvas.getContext('2d');
@@ -123,16 +119,14 @@
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
-      function yep() {
-        var kek = new weapon(5);
-        kek.addtoinv(p);
-      }
       var myApp = new Framework7();
       // Init slider and store its instance in mySwiper variable
       var mySwiper = myApp.swiper('.swiper-container', {
         pagination:'.swiper-pagination',
         parallax: false
       });
+      ctx.canvas.width = 10;
+      ctx.canvas.height = 10;
       function randint(min, max) {
       	min = Math.ceil(min);
       	max = Math.floor(max);
@@ -143,22 +137,28 @@
       }
       function dodgeend() {
         $("#dodge").removeClass("mashbut-reloading");
-        document.getElementById("dodge").innerHTML += "1";
+        settransition(0.01,"dodge");
+        $("#dodge").removeAttr("disabled");
+        //document.getElementById("dodge").innerHTML += "1";
       }
       function hitend() {
         $("#hit").removeClass("mashbut-reloading");
+        settransition(0.01,"hit");
+        $("#hit").removeAttr("disabled");
       }
-      $(function() {
-        $("#dodge").mouseup(function() {
-          $("#dodge").toggleClass("mashbut-reloading");
-        });
-      });
-      $(function() {
-        $("#hit").mouseup(function() {
-          $("#hit").toggleClass("mashbut-reloading");
-        });
-      });
-      gameloop();
+      function dodgestart() {
+        $("#dodge").attr("disabled","disabled");
+        $("#dodge").addClass("mashbut-reloading");
+        settransition(p.weap.swing,"dodge");
+        setTimeout(dodgeend,1000*p.weap.swing);
+      }
+      function hitstart() {
+        $("#hit").attr("disabled","disabled");
+        $("#hit").addClass("mashbut-reloading");
+        settransition(p.weap.swing,"hit");
+        setTimeout(hitend,1000*p.weap.swing);
+      }
+      init();
     </script>
 </body>
 
