@@ -5,7 +5,8 @@ class weapon {
     this.lv = lv;
     if (name == "handz") {
       this.name = "handz"
-      this.swing = 3;
+      this.swing = .1;
+      this.lv = 200;
     }
     else {
       this.type = randlist(types);
@@ -16,15 +17,21 @@ class weapon {
     this.damps = (this.dam/this.swing).toFixed(2);
     this.element = null;
   }
-  addtoinv(par) {
+  addtoinv(par,place) {
     par.inv.push(this);
     var idd = par.inv.length-1 + "";
     var iddd = idd+"content";
-    addelement(document.getElementById("invw"),"div","card",idd,null);
+    addelement(document.getElementById(place),"div","card",idd,null);
     addelement(document.getElementById(idd),"div","card-header",null,this.name);
     addelement(document.getElementById(idd),"div","card-content",iddd);
     addelement(document.getElementById(iddd),"div","card-content-inner",null,"Damage: " + this.dam + "<br/>Swing Speed: " + this.swing + "<br/>DPS: " + this.damps);
     this.element = document.getElementById(idd);
+    $("#" + idd).click(function() {
+      p.equipweap(parseInt(idd));
+    });
+    $("#" + idd).dblclick(function() {
+      p.drop(parseInt(idd));
+    });
   }
 }
 function addelement(par,type,clas,id=null,html=null,parallax=null) {

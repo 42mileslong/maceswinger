@@ -7,30 +7,25 @@ class player {
     this.lv = 0;
     this.inv = [];
     var we = new weapon(0,"handz");
-    we.addtoinv(this);
+    we.addtoinv(this,"eqweap");
     this.weap = we;
     this.state = "fight";
-    this.hit = {
-      ble: true,
-      count: 60 * this.weap.swing,
-      max: 60 * this.weap.swing,
-    }
-  }
-  hitupdate() {
-    if (!this.hit.ble) {
-      this.count--;
-      if (this.count <= 0) {
-        this.hit.ble = true;
-        this.hit.count = this.hit.max;
-      }
-    }
   }
   equipweap(invslot) {
     $(this.weap.element).remove();
-    this.weap.addtoinv(this);
+    this.weap.addtoinv(this,"invw");
     this.weap = this.inv[invslot];
-    this.hit.count = this.hit.max = 60*this.weap.swing;
+    $(this.inv[invslot].element).remove();
+    this.inv[invslot] = null;
     settransition(this.weap.swing);
-    $(this.weap.element).addClass("weapselected");
+    this.weap.addtoinv(this,"eqweap");
+  }
+  hit(en) {
+    curen.health -= this.weap.dam;
+    curen.update();
+  }
+  drop(id) {
+    this.inv[id].element.remove();
+    this.inv[id] = null;
   }
 }
