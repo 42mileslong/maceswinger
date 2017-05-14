@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.min.css">
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
-
+    <link rel="stylesheet" href="css/framework7-icons.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -91,6 +91,7 @@
                         <div class="content-block">
                             <canvas id="screen" style="margin: auto;display:block"></canvas>
                             <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Hit</a>
+                              <canvas id="changer" hidden></canvas>
                         </div>
                     </div>
                 </div>
@@ -114,6 +115,10 @@
     <script type="text/javascript" src="resources/enemy.js"></script>
     <script type="text/javascript" src="resources/game.js"></script>
     <script type="text/javascript">
+      var enemiesimg = new Image();
+      enemiesimg.src = "resources/enemies.png";
+      var weapsimg = new Image();
+      weapsimg.src = "resources/weapons.png";
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -124,8 +129,6 @@
       var ctx = canvas.getContext('2d');
       ctx.imageSmoothingEnabled = false;
       var p = new player();
-      var enemiesimg = new Image();
-      enemiesimg.src = "resources/enemies.png";
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
           swipePanel: 'left'

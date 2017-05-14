@@ -19,6 +19,7 @@ class player {
     this.inv[invslot] = null;
     settransition(this.weap.swing);
     this.weap.addtoinv(this,"eqweap");
+    $(this.weap.element).addClass("weapselected");
   }
   hit(en) {
     curen.health -= this.weap.dam;
