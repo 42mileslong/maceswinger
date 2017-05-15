@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body>
+<body onresize="resize()">
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
@@ -77,7 +77,7 @@
                           Right link contains only icon - additional "icon-only" class
                           Additional "open-panel" class tells app to open panel when we click on this link
                         -->
-                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
+                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars" id="invicon"></i></a>
                     </div>
                     <div class="center sliding">Mace Swinger</div>
                 </div>
@@ -87,11 +87,11 @@
                 <!-- Page, "data-page" contains page name -->
                 <div data-page="index" class="page">
                     <!-- Scrollable page content -->
-                    <div class="page-content">
+                    <div class="page-content" id="main">
                         <div class="content-block">
-                            <canvas id="screen" style="margin: auto;display:block"></canvas>
+                            <canvas id="screen" style="margin:auto;display:block"></canvas>
                             <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Hit</a>
-                              <canvas id="changer" hidden></canvas>
+                              <canvas id="changer" width="64" height="128" hidden></canvas>
                         </div>
                     </div>
                 </div>
@@ -119,6 +119,8 @@
       enemiesimg.src = "resources/enemies.png";
       var weapsimg = new Image();
       weapsimg.src = "resources/weapons.png";
+      var healthbar = new Image();
+      healthbar.src = "resources/healthbar.png";
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -127,17 +129,18 @@
       }
       var canvas = document.getElementById('screen');
       var ctx = canvas.getContext('2d');
-      ctx.imageSmoothingEnabled = false;
+      var change = document.getElementById("changer");
+      var ctxchange = change.getContext("2d");
       var p = new player();
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
           swipePanel: 'left'
       });
-      ctx.canvas.width = size.w * .5;
-      ctx.canvas.height = size.h - 390;
-      ctx.webkitImageSmoothingEnabled = false;
-      ctx.mozImageSmoothingEnabled = false;
-      ctx.imageSmoothingEnabled = false;
+      resize();
+      ctx.font = "30px Arial";
+      ctxchange.webkitImageSmoothingEnabled = false;
+      ctxchange.mozImageSmoothingEnabled = false;
+      ctxchange.imageSmoothingEnabled = false;
       function randint(min, max) {
       	min = Math.ceil(min);
       	max = Math.floor(max);
@@ -149,13 +152,17 @@
       function dodgeend() {
         $("#dodge").removeClass("mashbut-reloading");
         settransition(0.01,"dodge");
-        $("#dodge").removeAttr("disabled");
+        if (p.state == "fight") {
+          $("#dodge").removeAttr("disabled");
+        }
         //document.getElementById("dodge").innerHTML += "1";
       }
       function hitend() {
         $("#hit").removeClass("mashbut-reloading");
         settransition(0.01,"hit");
-        $("#hit").removeAttr("disabled");
+        if (p.state == "fight") {
+          $("#hit").removeAttr("disabled");
+        }
       }
       function dodgestart() {
         $("#dodge").attr("disabled","disabled");
@@ -169,6 +176,26 @@
         p.hit(curen);
         settransition(p.weap.swing,"hit");
         setTimeout(hitend,1000*p.weap.swing);
+      }
+      function resize() {
+        size = {
+          w: document.documentElement.clientWidth,
+          h: document.documentElement.clientHeight
+        }
+        ctx.canvas.width = size.w*.75;
+        ctx.canvas.height = size.h - 410;
+        ctx.webkitImageSmoothingEnabled = false;
+        ctx.mozImageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = false;
+      }
+      function invover(way) {
+        var ico = document.getElementById("invicon");
+        if (way) {
+          $(ico).addClass("color-red");
+        }
+        else {
+          $(ico).removeClass("color-red");
+        }
       }
       init();
     </script>
