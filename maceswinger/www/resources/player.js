@@ -6,6 +6,7 @@ class player {
     this.exp = 0;
     this.lv = 0;
     this.inv = [];
+    this.invsize = 2;
     var we = new weapon(0,"handz");
     we.addtoinv(this,"eqweap");
     this.state = "fight";
@@ -29,6 +30,9 @@ class player {
     $(this.inv[id].element).remove();
     this.inv[id] = null;
     this.refreshinv();
+    if (p.inv.length == p.invsize) {
+      invover(false);
+    }
   }
   refreshinv() {
     var tempinv = [];
@@ -46,6 +50,15 @@ class player {
     for (var i in tempinv) {
       tempinv[i].addtoinv(this,"invw");
     }
+  }
+  droplowest() {
+    var tempslot = 0;
+    for (var i in this.inv) {
+      if (this.inv[i].damps < this.inv[tempslot].damps) {
+        tempslot = i;
+      }
+    }
+    p.drop(tempslot);
   }
   setstate(state) {
     p.state = state;

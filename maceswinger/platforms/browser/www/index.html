@@ -192,9 +192,22 @@
         var ico = document.getElementById("invicon");
         if (way) {
           $(ico).addClass("color-red");
+          var idd = "temp";
+          var iddd = "temp2";
+          addelement(document.getElementById("main"),"div","card",idd,null,"width:260px;position:absolute");
+          document.getElementById(idd).style.left = size.w/2-135 + "px";
+          document.getElementById(idd).style.top = size.h*1/3 + "px";
+          addelement(document.getElementById(idd),"div","card-header",idd + "head","Inventory Full!");
+          addelement(document.getElementById(idd),"div","card-content",iddd);
+          addelement(document.getElementById(iddd),"div","card-content-inner",null,"Drop an item from your inventory or<a href='#' class='button' style='height:100%' id='tempdrop'>Drop Lowest DPS Item</a>");
+          $("#tempdrop").click(function() {
+            p.droplowest();
+          });
         }
         else {
           $(ico).removeClass("color-red");
+          document.getElementById("temp").remove();
+          p.setstate("fight");
         }
       }
       init();

@@ -1,5 +1,6 @@
-var materials = ["Wooden", "Stone", "Iron", "steel", "rainbow"];
+var materials = ["Wooden", "Stone", "Copper", "Golden", "Iron", "Diamond", "Steel"];
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
+var craft = [["",0],["Pointy ",1],["Broken ",-2]];
 class weapon {
   constructor(lv,name = null) {
     this.lv = lv;
@@ -7,18 +8,24 @@ class weapon {
       this.name = "handz"
       this.swing = .1;
       this.lv = 200;
+      this.craft = 0;
     }
     else {
       this.type = randint(0,types.length-1);
       this.swing = types[this.type][1];
-      this.name = materials[this.lv] + " " + types[this.type][0];
+      this.craft = 0;
+      if (randint(0,1) == 1) {
+        this.craft = randint(1,craft.length-1);
+      }
+      this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0];
     }
-    this.dam = (this.lv*2 + 4)*(Math.pow(this.swing,1.1)).toFixed(2);
+    this.dam = ((this.lv*2 + 4 + (this.lv+1)/2*craft[this.craft][1])*(Math.pow(this.swing,1.1))).toFixed(2);
     this.damps = (this.dam/this.swing).toFixed(2);
     this.element = null;
     this.buttons = null;
     this.img = new Image(64,128);
     ctxchange.drawImage(weapsimg, this.lv * 16,8 + this.type*32,16,32,0,0,64,128);
+    ctxchange.drawImage(weapsimg, (this.type + this.craft*3) * 16,8 + 3*32,16,32,0,0,64,128);
     this.img.src = change.toDataURL("image/png");
     ctxchange.clearRect(0,0,64,128);
   }
@@ -45,7 +52,7 @@ class weapon {
       });
       $("#" + idd + "head").click(function() {
         togglebut(parr,idd)
-      });  
+      });
     }
   }
   prompt() {
@@ -68,10 +75,18 @@ class weapon {
     });
   }
   refuse(selected,par=null,place=null) {
-    p.setstate("fight");
     document.getElementById("temp").remove();
     if (selected) {
       this.addtoinv(par,place);
+      if (p.inv.length > p.invsize) {
+        invover(true);
+      }
+      else {
+        p.setstate("fight");
+      }
+    }
+    else {
+      p.setstate("fight");
     }
   }
 }
