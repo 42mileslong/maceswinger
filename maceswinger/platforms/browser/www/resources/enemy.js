@@ -9,7 +9,7 @@ class enemy {
     this.lv = lv;
     this.weapon = new weapon(lv);
     this.golddropped = randint(-lv,lv) + 2*lv;
-    this.exp = this.lv * 1.1 + 1;
+    this.exp = this.lv * 1.1 + 10;
     this.health = this.healthmax = 10;
     this.alive = true;
     if (area == "an") {
@@ -24,6 +24,7 @@ class enemy {
     else if (area == 'bm') {
       this.type = randlist(entypes[3]);
     }
+    this.name = this.type[0]
   }
   update() {
     if (this.health <= 0) {

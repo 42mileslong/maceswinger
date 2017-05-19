@@ -3,13 +3,17 @@ class player {
     this.name = "";
     this.gold = 0;
     this.health = 0;
-    this.exp = 0;
-    this.lv = 0;
+    this.exp = {
+      cur: 0,
+      next: 100,
+      last: 0,
+    }
+    this.lv = 1;
     this.inv = [];
     this.invsize = 2;
     var we = new weapon(0,"handz");
     we.addtoinv(this,"eqweap");
-    this.state = "fight";
+    this.state = "story";
     this.refreshinv();
   }
   equipweap(invslot) {
@@ -70,6 +74,23 @@ class player {
       $("#dodge").removeAttr("disabled");
       $("#hit").removeAttr("disabled");
       curen = new enemy(0,randlist(["an","bn","am","bm"]));
+      togglescreen("fight");
+      story.variablesState["curenname"] = curen.name;
+      gameloop();
     }
+    else if (state == "story") {
+      togglescreen("story");
+      story.ChoosePathString("after");
+    }
+  }
+  expup(exp) {
+    this.exp.cur += exp;
+    if (this.exp.next <= this.exp.cur) {
+      this.lv++;
+      document.getElementById("plv").innerHTML = this.lv;
+      this.exp.last = this.exp.next;
+      this.exp.next += this.exp.next*1.1;
+    }
+    myApp.setProgressbar(document.getElementById("expbar"), (this.exp.cur - this.exp.last) / (this.exp.next - this.exp.last)*100, 1000);
   }
 }

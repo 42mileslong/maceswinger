@@ -1,4 +1,4 @@
-var materials = ["Wooden", "Stone", "Copper", "Golden", "Iron", "Diamond", "Steel"];
+var materials = ["Wooden", "Stone", "Copper", "Golden", "Iron", "Diamond", "Steel", "Obsidian"];
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
 var craft = [["",0],["Pointy ",1],["Broken ",-2]];
 class weapon {
@@ -82,11 +82,11 @@ class weapon {
         invover(true);
       }
       else {
-        p.setstate("fight");
+        p.setstate("story");
       }
     }
     else {
-      p.setstate("fight");
+      p.setstate("story");
     }
   }
 }
