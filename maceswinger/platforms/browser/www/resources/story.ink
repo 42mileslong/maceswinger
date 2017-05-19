@@ -23,6 +23,10 @@ You continue walking through the dungeon.
         -> exit
     +   {current_lvl != 0} Walk towards the light.
         ~ current_lvl--
+        { current_lvl < 10:
+            ~ fight()
+            -> DONE
+        }
         -> move
     +   Walk deeper.
         ~ current_lvl++
@@ -33,11 +37,6 @@ You continue walking through the dungeon.
                 ~ fight()
                 -> DONE
             }
-        }
-        
-        { current_lvl < 10:
-            ~ fight()
-            -> DONE
         }
         
         -> move
