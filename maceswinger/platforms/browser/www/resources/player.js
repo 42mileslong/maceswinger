@@ -11,7 +11,7 @@ class player {
     this.lv = 1;
     this.inv = [];
     this.invsize = 2;
-    var we = new weapon(0,"handz");
+    var we = new Weapon(0,"handz");
     we.addtoinv(this,"eqweap");
     this.state = "story";
     this.refreshinv();
@@ -55,7 +55,7 @@ class player {
       tempinv[i].addtoinv(this,"invw");
     }
   }
-  droplowest() {
+  droplowest() { //broken, for some reason
     var tempslot = 0;
     for (var i in this.inv) {
       if (this.inv[i].damps < this.inv[tempslot].damps) {

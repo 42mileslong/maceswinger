@@ -14,7 +14,7 @@ function gameloop() {
     //ctx.fillText(curen.health,size.w*.75/2,40);
     if (!curen.alive) {
       p.expup(curen.exp);
-      (new weapon(randint(0,materials.length-1))).prompt();
+      (new Weapon(randint(0,materials.length-1))).prompt();
     }
     window.requestAnimationFrame(gameloop);
   }
@@ -39,7 +39,6 @@ function showAfter(delay, el) {
 }
 
 function scrollToBottom() {
-    console.log('k')
     var progress = 0.0;
     var start = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     var dist = document.body.scrollHeight - window.innerHeight - start;
@@ -57,7 +56,6 @@ function scrollToBottom() {
     requestAnimationFrame(step);
 }
 function scrollQuickToBottom() {
-  console.log("k")
   //$('#main').scrollTop($("#story").height());
   if (p.state == "fight" || p.state == "loot") {
     $("#main").animate({ scrollTop: 0}, "slow");

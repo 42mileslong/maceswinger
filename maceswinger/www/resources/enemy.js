@@ -7,7 +7,7 @@ var entypes = [
 class enemy {
   constructor(lv,area) {
     this.lv = lv;
-    this.weapon = new weapon(lv);
+    this.weapon = new Weapon(lv);
     this.golddropped = randint(-lv,lv) + 2*lv;
     this.exp = this.lv * 1.1 + 10;
     this.health = this.healthmax = 10;
