@@ -19,7 +19,7 @@ You continue walking through the dungeon.
 {current_lvl < 0:
     <> Suddenly, you find yourself at the exit! Through the doorway you see a forest far below. You appear to be on the side of a vast mountain.
 }
-    +   {current_lvl< 0} Leave the door 
+    +   {current_lvl == 0} Leave the door 
         -> exit
     +   {current_lvl != 0} Walk towards the light.
         ~ current_lvl--
@@ -50,4 +50,5 @@ You make you way out of the dungeon in the light! The waving fields of grain app
     * [Walk towards the town in the distance.] You begin your trek down the cliff.
         - Suddenly, you are shoved from the side! As you fall off the cliff, you hear the man's words. "You wimp!"
         - You die.
+        - The end.
 -> END
