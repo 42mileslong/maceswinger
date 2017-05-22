@@ -7,10 +7,10 @@ var entypes = [
 class enemy {
   constructor(lv,area) {
     this.lv = lv;
-    this.weapon = new Weapon(lv);
+    //this.weapon = new Weapon(lv);
     this.golddropped = randint(-lv,lv) + 2*lv;
     this.exp = this.lv * 1.1 + 10;
-    this.health = this.healthmax = 10;
+    this.health = this.healthmax = 15 + this.lv * 2;
     this.alive = true;
     if (area == "an") {
       this.type = randlist(entypes[0]);

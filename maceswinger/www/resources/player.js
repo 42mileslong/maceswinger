@@ -73,7 +73,7 @@ class player {
     else if (state == "fight") {
       $("#dodge").removeAttr("disabled");
       $("#hit").removeAttr("disabled");
-      curen = new enemy(0,randlist(["an","bn","am","bm"]));
+      curen = new enemy(Math.max(randint(-2,2) + p.lv,0),randlist(["an","bn","am","bm"]));
       togglescreen("fight");
       story.variablesState["curenname"] = curen.name;
       gameloop();
