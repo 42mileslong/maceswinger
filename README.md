@@ -1,4 +1,4 @@
-## How to set up
+## How to set up:
 - Download Adobe PhoneGap and import directory.
 
 ## Features:
