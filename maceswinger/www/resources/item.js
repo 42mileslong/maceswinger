@@ -131,6 +131,7 @@ function addelement(par,type,clas,id=null,html=null,style=null) {
   }
   par.appendChild(ele);
 }
+
 function togglebut(parr,idd) {
   if (parr.buttons != null) {
     parr.buttons.remove();

@@ -62,6 +62,18 @@
                   </div>-->
         </div>
       </div>
+      <div class="panel panel-right panel-reveal" style="">
+          <div data-page="index" class="page navbar-fixed" style="">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"></div>
+                <div class="center">Map</div>
+                <div class="right"></div>
+              </div>
+            </div>
+            <div class="page-content" id="mapcontent" style="width:240px;overflow-x:auto"></div>
+          </div>
+        </div>
   </div>
 
 
@@ -78,9 +90,12 @@
                           Right link contains only icon - additional "icon-only" class
                           Additional "open-panel" class tells app to open panel when we click on this link
                         -->
-                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars" id="invicon"></i></a>
+                        <a href="#" class="icon-only open-panel" data-panel="left"><i class="icon icon-bars" id="invicon"></i></a>
                     </div>
                     <div class="center sliding">Mace Swinger</div>
+                    <div class="right">
+                      <a href="#" class="icon-only open-panel" data-panel="right"><i class="icon icon-bars" id=""></i></a>
+                    </div>
                 </div>
             </div>
             <!-- Pages container, because we udse fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -124,6 +139,7 @@
     <script src="resources/ink.js"></script>
     <script src="resources/story.js"></script>
     <script src="resources/item.js"></script>
+    <script src="resources/map.js"></script>
     <script>
       //https://github.com/TheBerkin/Rant maybe use this?d
       var story = new inkjs.Story(storyContent);
@@ -135,6 +151,10 @@
       weapsimg.src = "resources/weapons.png";
       var healthbar = new Image();
       healthbar.src = "resources/healthbar.png";
+      var tile_ocean = new Image();
+      tile_ocean.src = "resources/tiles/tile_ocean.png";
+      var tile_forest = new Image();
+      tile_forest.src = "resources/tiles/tile_forest.png";
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -148,8 +168,10 @@
       var p = new player();
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
-          swipePanel: 'left'
+          swipePanel: 'both',
       });
+      var gamemap = new Map(120,40);
+      gamemap.display("mapcontent");
       resize();
       ctx.font = "30px Arial";
       ctxchange.webkitImageSmoothingEnabled = false;
