@@ -115,6 +115,7 @@
                           <div class="chip-label" id="plv" style="width:0%;margin:auto">1</div>
                         </div>
                         <canvas id="changer" width="64" height="128" hidden></canvas>
+                        <canvas id="mapchanger" width="100" height="100" hidden></canvas>
                     </div>
                   </div>
                 </div>
@@ -165,12 +166,14 @@
       var ctx = canvas.getContext('2d');
       var change = document.getElementById("changer");
       var ctxchange = change.getContext("2d");
+      var mapchange = document.getElementById("mapchanger");
+      var ctxmapchange = change.getContext("2d");
       var p = new player();
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
           swipePanel: 'both',
       });
-      var gamemap = new Map(120,40);
+      var gamemap = new Map(10,10);
       gamemap.display("mapcontent");
       resize();
       ctx.font = "30px Arial";

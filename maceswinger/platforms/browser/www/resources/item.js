@@ -114,7 +114,7 @@ class Weapon extends Item {
     ctxchange.drawImage(weapsimg, this.lv * 16,8 + this.type*32,16,32,0,0,64,128);
     ctxchange.drawImage(weapsimg, (this.type + this.craft*3) * 16,8 + 3*32,16,32,0,0,64,128);
     this.img.src = change.toDataURL("image/png");
-    ctxchange.clearRect(0,0,64,128);//
+    //ctxchange.clearRect(0,0,64,128);//
   }
 }
 function addelement(par,type,clas,id=null,html=null,style=null) {

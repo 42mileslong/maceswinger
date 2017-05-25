@@ -15,7 +15,7 @@ class Map {
     ids.push(getpoint(Math.floor(width/2),0,0));
     ids.push(getpoint(Math.floor(width/2),Math.floor(height/2),0));
     ids.push(getpoint(0,Math.floor(height/2),0));
-    console.log(ids)
+    //console.log(ids)
     for (var i = 0; i < width; i++) {
       tempmap.push([])
       for (var j = 0; j < height; j++) {
@@ -39,20 +39,21 @@ class Map {
       w: width,
       h: height
     }
+    this.img = null;
   }
   display(parid) {
     var id = "mapdisplay" + this.size.w + this.size.h;
     var pics = [tile_ocean,tile_forest];
-    addelement(document.getElementById(parid),"div","",id,"","display:flex;flex-wrap:wrap");
-    for (var i in this.map) {
-      for (var j in this.map[i]) {
-        addelement(document.getElementById(id),"div","",""+i+j+i,"","width:6px;height:6px;display:inline-block;padding:0px");
-        document.getElementById(""+i+j+i).appendChild(pics[this.map[i][j]].cloneNode(true));
-        document.getElementById(""+i+j+i).childNodes[0].style.height = "6px"
-        document.getElementById(""+i+j+i).childNodes[0].style.position = "absolute"
+    //ctxmapchange.clearRect(0,0,100,100);
+    for (var i = 0; i < this.size.h; i++) {
+      for (var j = 0; j < this.size.w; j++) {
+        ctxmapchange.drawImage(tile_ocean,0,0);
+        //pics[this.map[i][j]]
       }
-      addelement(document.getElementById(id),"div","","lel"+i+j+i,"","display:block;height:0px;padding:0px");
     }
+    this.img = new Image(100,100);
+    this.img.src = mapchange.toDataURL("image/png");
+    addelement(document.getElementById(parid),"div","",id,"<img style='' src=\"" + this.img.src + "\"></img>","");
   }
 }
 function getpoint(x,y,id) {
