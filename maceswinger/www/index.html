@@ -115,7 +115,7 @@
                           <div class="chip-label" id="plv" style="width:0%;margin:auto">1</div>
                         </div>
                         <canvas id="changer" width="64" height="128" hidden></canvas>
-                        <canvas id="mapchanger" width="100" height="100" hidden></canvas>
+                        <canvas id="mapchanger" width="200" height="200" hidden></canvas>
                     </div>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
     <script src="resources/item.js"></script>
     <script src="resources/map.js"></script>
     <script>
-      //https://github.com/TheBerkin/Rant maybe use this?d
+      //https://github.com/TheBerkin/Rant maybe use this?
       var story = new inkjs.Story(storyContent);
       story.BindExternalFunction("fight", function() { p.setstate("fight") });
       var storyContainer = document.querySelectorAll('#story')[0];
@@ -167,19 +167,13 @@
       var change = document.getElementById("changer");
       var ctxchange = change.getContext("2d");
       var mapchange = document.getElementById("mapchanger");
-      var ctxmapchange = change.getContext("2d");
+      var ctxmapchange = mapchange.getContext("2d");
       var p = new player();
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
           swipePanel: 'both',
       });
       var gamemap = new Map(10,10);
-      gamemap.display("mapcontent");
-      resize();
-      ctx.font = "30px Arial";
-      ctxchange.webkitImageSmoothingEnabled = false;
-      ctxchange.mozImageSmoothingEnabled = false;
-      ctxchange.imageSmoothingEnabled = false;
       function randint(min, max) {
       	min = Math.ceil(min);
       	max = Math.floor(max);
@@ -223,9 +217,6 @@
         }
         ctx.canvas.width = size.w*.75;
         ctx.canvas.height = size.h - 410;
-        ctx.webkitImageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.imageSmoothingEnabled = false;
       }
       function invover(way) {
         var ico = document.getElementById("invicon");
@@ -266,7 +257,10 @@
           console.log("error in switching screen");
         }
       }
-      init();
+      window.onload = function() {
+        resize();
+        init();
+      };
     </script>
 </body>
 

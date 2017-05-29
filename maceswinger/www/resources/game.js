@@ -1,9 +1,3 @@
-function init() {
-  p.equipweap(0);
-  togglescreen("story");
-  window.requestAnimationFrame(gameloop);
-  ctx.fillStyle = 'rgba(0, 0, 0)';
-}
 function gameloop() {
   ctx.clearRect(0,0,canvas.width,canvas.height)
   if (p.state == "fight") {
@@ -37,7 +31,25 @@ function settransition(time,par) {
 function showAfter(delay, el) {
     setTimeout(function() { el.classList.add("show") }, delay);
 }
-
+function init() {
+  gamemap.display("mapcontent")
+  ctx.imageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.oImageSmoothingEnabled = false;
+  ctx.webkitImageSmoothingEnabled = false;
+  ctxchange.imageSmoothingEnabled = false;
+  ctxchange.mozImageSmoothingEnabled = false;
+  ctxchange.oImageSmoothingEnabled = false;
+  ctxchange.webkitImageSmoothingEnabled = false;
+  ctxmapchange.imageSmoothingEnabled = false;
+  ctxmapchange.mozImageSmoothingEnabled = false;
+  ctxmapchange.oImageSmoothingEnabled = false;
+  ctxmapchange.webkitImageSmoothingEnabled = false;
+  p.equipweap(0);
+  togglescreen("story");
+  window.requestAnimationFrame(gameloop);
+  ctx.fillStyle = 'rgba(0, 0, 0)';
+}
 function scrollToBottom() {
     var progress = 0.0;
     var start = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
