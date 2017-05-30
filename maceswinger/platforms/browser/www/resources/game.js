@@ -32,6 +32,11 @@ function showAfter(delay, el) {
     setTimeout(function() { el.classList.add("show") }, delay);
 }
 function init() {
+  resize();
+  ctxmapchange.imageSmoothingEnabled = false;
+  ctxmapchange.mozImageSmoothingEnabled = false;
+  ctxmapchange.oImageSmoothingEnabled = false;
+  ctxmapchange.webkitImageSmoothingEnabled = false;
   gamemap.display("mapcontent")
   ctx.imageSmoothingEnabled = false;
   ctx.mozImageSmoothingEnabled = false;
@@ -41,10 +46,6 @@ function init() {
   ctxchange.mozImageSmoothingEnabled = false;
   ctxchange.oImageSmoothingEnabled = false;
   ctxchange.webkitImageSmoothingEnabled = false;
-  ctxmapchange.imageSmoothingEnabled = false;
-  ctxmapchange.mozImageSmoothingEnabled = false;
-  ctxmapchange.oImageSmoothingEnabled = false;
-  ctxmapchange.webkitImageSmoothingEnabled = false;
   p.equipweap(0);
   togglescreen("story");
   window.requestAnimationFrame(gameloop);

@@ -115,7 +115,7 @@
                           <div class="chip-label" id="plv" style="width:0%;margin:auto">1</div>
                         </div>
                         <canvas id="changer" width="64" height="128" hidden></canvas>
-                        <canvas id="mapchanger" width="200" height="200" hidden></canvas>
+                        <canvas id="mapchanger" width="320" height="320" hidden></canvas>
                     </div>
                   </div>
                 </div>
@@ -152,10 +152,8 @@
       weapsimg.src = "resources/weapons.png";
       var healthbar = new Image();
       healthbar.src = "resources/healthbar.png";
-      var tile_ocean = new Image();
-      tile_ocean.src = "resources/tiles/tile_ocean.png";
-      var tile_forest = new Image();
-      tile_forest.src = "resources/tiles/tile_forest.png";
+      var tiles = new Image();
+      tiles.src = "resources/tiles/mapicons.png";
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
