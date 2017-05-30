@@ -23,18 +23,19 @@ class Map {
       for (var j = 0; j < this.size.w; j++) {
         ctxmapchange.drawImage(this.map[i][j].img[0],24,0,8,8,i*32,j*32,32,32);
         ctxmapchange.drawImage(this.map[i][j].img[0],this.map[i][j].img[1]*8,0,8,8,i*32,j*32,32,32);
-        areahtml += "<area shape='rect' coords=\"" + i*32 + "," + j*32 + "," + (i+1)*32 + "," + (j+1)*32 + "\" alt = \"" + this.map[i][j].type + "\" href='#' id=\"" + 'maparea' + (i+j) + "\">"
+        areahtml += "<area shape='rect' coords=\"" + i*32 + "," + j*32 + "," + (i+1)*32 + "," + (j+1)*32 + "\" alt = \"" + this.map[i][j].type + "\" href='#' id=\"" + 'maparea' + i+j + "\">"
       }
     }
     areahtml += "</map>"
     this.img = new Image(320,320);
     this.img.src = mapchange.toDataURL("image/png");
     addelement(document.getElementById(parid),"div","",id,"<img style='' usemap='#maparea' src=\"" + this.img.src + "\"></img>" + areahtml,"");
-    for (var i = 0; i < this.size.h; i++) {
-      for (var j = 0; j < this.size.w; j++) {
-        document.getElementById("maparea" + (i + j)).onclick = function() {
-          alert(this.map[i][j].type)
-        }
+    for (let i = 0; i < this.size.h; i++) {
+      for (let j = 0; j < this.size.w; j++) {
+        var lel = this;
+        $("#maparea" + i + j).click(function() {
+          alert(lel.map[i][j].type + i + j);
+        });
       }
     }
   }
