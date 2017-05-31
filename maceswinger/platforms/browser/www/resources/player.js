@@ -15,6 +15,10 @@ class player {
     we.addtoinv(this,"eqweap");
     this.state = "story";
     this.refreshinv();
+    this.coords = {
+      x: 0,
+      y: 0,
+    }
   }
   equipweap(invslot) {
     $(this.weap.element).remove();

@@ -37,7 +37,7 @@ function init() {
   ctxmapchange.mozImageSmoothingEnabled = false;
   ctxmapchange.oImageSmoothingEnabled = false;
   ctxmapchange.webkitImageSmoothingEnabled = false;
-  gamemap.display("mapcontent")
+  gamemap = new Map(10,10)
   ctx.imageSmoothingEnabled = false;
   ctx.mozImageSmoothingEnabled = false;
   ctx.oImageSmoothingEnabled = false;
@@ -69,11 +69,10 @@ function scrollToBottom() {
     requestAnimationFrame(step);
 }
 function scrollQuickToBottom() {
-  //$('#main').scrollTop($("#story").height());
-  if (p.state == "fight" || p.state == "loot") {
-    $("#main").animate({ scrollTop: 0}, "slow");
-  }
-  else if (p.state == "story"){
+  //if (p.state == "fight" || p.state == "loot") {
+    //$("#main").animate({ scrollTop: 0}, "slow");
+  //}
+  if (p.state == "story"){
     $("#main").animate({ scrollTop: $("#story").height()}, "slow");
   }
 }
@@ -135,4 +134,91 @@ function continueStory() {
         });
     });
     scrollQuickToBottom();
+}
+function randint(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randlist(list) {
+  return list[randint(0, list.length - 1)];
+}
+function dodgeend() {
+  $("#dodge").removeClass("mashbut-reloading");
+  settransition(0.01,"dodge");
+  if (p.state == "fight") {
+    $("#dodge").removeAttr("disabled");
+  }
+  //document.getElementById("dodge").innerHTML += "1";
+}
+function hitend() {
+  $("#hit").removeClass("mashbut-reloading");
+  settransition(0.01,"hit");
+  if (p.state == "fight") {
+    $("#hit").removeAttr("disabled");
+  }
+}
+function dodgestart() {
+  $("#dodge").attr("disabled","disabled");
+  $("#dodge").addClass("mashbut-reloading");
+  settransition(p.weap.swing,"dodge");
+  setTimeout(dodgeend,1000*p.weap.swing);
+}
+function hitstart() {
+  $("#hit").attr("disabled","disabled");
+  $("#hit").addClass("mashbut-reloading");
+  p.hit(curen);
+  settransition(p.weap.swing,"hit");
+  setTimeout(hitend,1000*p.weap.swing);
+}
+function resize() {
+  size = {
+    w: document.documentElement.clientWidth,
+    h: document.documentElement.clientHeight
+  }
+  ctx.canvas.width = size.w*.75;
+  ctx.canvas.height = size.h - 410;
+  ctx.imageSmoothingEnabled = false;
+  ctx.mozImageSmoothingEnabled = false;
+  ctx.oImageSmoothingEnabled = false;
+  ctx.webkitImageSmoothingEnabled = false;
+}
+function invover(way) {
+  var ico = document.getElementById("invicon");
+  if (way) {
+    $(ico).addClass("color-red");
+    var idd = "temp";
+    var iddd = "temp2";
+    addelement(document.getElementById("main"),"div","card",idd,null,"width:260px;position:absolute");
+    document.getElementById(idd).style.left = size.w/2-135 + "px";
+    document.getElementById(idd).style.top = size.h*1/3 + "px";
+    addelement(document.getElementById(idd),"div","card-header",idd + "head","Inventory Full!");
+    addelement(document.getElementById(idd),"div","card-content",iddd);
+    addelement(document.getElementById(iddd),"div","card-content-inner",null,"Drop an item from your inventory or<a href='#' class='button' style='height:100%' id='tempdrop'>Drop Lowest DPS Item</a>");
+    $("#tempdrop").click(function() {
+      p.droplowest();
+    });
+  }
+  else {
+    $(ico).removeClass("color-red");
+    document.getElementById("temp").remove();
+    p.setstate("story");
+  }
+}
+function togglescreen(way) {
+  if (way == "story") {
+    $("#fight").hide({duration:0});
+    $("#story").show({duration:0,easing:"linear"});
+    document.getElementById("inkstyle").disabled = undefined;
+    document.getElementById("main").style.overflow = "scroll";
+  }
+  else if (way == "fight") {
+    $("#story").hide({duration:0})
+    $("#fight").show({duration:0,easing:"linear"})
+    document.getElementById("inkstyle").disabled = "disabled";
+    document.getElementById("main").style.overflow = "hidden";
+  }
+  else {
+    console.log("error in switching screen");
+  }
 }

@@ -5,7 +5,6 @@ class Map {
       w: width-1,
       h: height-1
     }
-    this.img = null;
     for (var i = 0; i < width; i++) {
       this.map.push([]);
       for (var j = 0; j < height; j++) {
@@ -15,25 +14,28 @@ class Map {
     this.addfeatures("dungeon",20);
     this.addfeatures("city",2);
     this.addfeatures("village",5);
-  }
-  display(parid) {
-    var id = "mapdisplay";
-    var areahtml = "<map name='maparea' id='areamap'>"
+
+    this.areahtml = "<map name='maparea' id='areamap'>"
     for (var i = 0; i < this.size.h; i++) {
       for (var j = 0; j < this.size.w; j++) {
         ctxmapchange.drawImage(this.map[i][j].img[0],24,0,8,8,i*32,j*32,32,32);
         ctxmapchange.drawImage(this.map[i][j].img[0],this.map[i][j].img[1]*8,0,8,8,i*32,j*32,32,32);
-        areahtml += "<area shape='rect' coords=\"" + i*32 + "," + j*32 + "," + (i+1)*32 + "," + (j+1)*32 + "\" alt = \"" + this.map[i][j].type + "\" href='#' id=\"" + 'maparea' + i+j + "\">"
+        this.areahtml += "<area shape='rect' coords=\"" + i*32 + "," + j*32 + "," + (i+1)*32 + "," + (j+1)*32 + "\" alt = \"" + this.map[i][j].type + "\" href='#' id=\"" + 'maparea' + i+j + "\">"
       }
     }
-    areahtml += "</map>"
+    this.areahtml += "</map>"
     this.img = new Image(320,320);
     this.img.src = mapchange.toDataURL("image/png");
-    addelement(document.getElementById(parid),"div","",id,"<img style='' usemap='#maparea' src=\"" + this.img.src + "\"></img>" + areahtml,"");
+  }
+  display(parid) {
+    $("#mapdisplay").remove();
+    ctxmapchange.drawImage(this.img,0,0);
+    ctxmapchange.drawImage(tiles,32,0,8,8,p.coords.x*32,p.coords.y*32,32,32);
+    addelement(document.getElementById(parid),"div","","mapdisplay","<img usemap='#maparea' style='margin:auto;display:block' src=\"" + mapchange.toDataURL("image/png") + "\"></img>" + this.areahtml,"");
     for (let i = 0; i < this.size.h; i++) {
       for (let j = 0; j < this.size.w; j++) {
         var lel = this;
-        $("#maparea" + i + j).click(function() {
+        $("#maparea" + i + j).unbind("click").click(function() {
           alert(lel.map[i][j].type + i + j);
         });
       }
@@ -48,6 +50,22 @@ class Map {
         y = randint(0,this.size.h-1);
       }
       this.map[x][y] = new feature(type,x + y)
+    }
+  }
+  moveplayer(dir) {
+    console.log('k')
+    var tempcoords = p.coords;
+    if (dir == "east") {tempcoords.x++;}
+    else if (dir == "west") {tempcoords.x--;}
+    else if (dir == "north") {tempcoords.y++;}
+    else if (dir == "south") {tempcoords.y--;}
+    if (tempcoords.x < 0 || tempcoords.y < 0 || tempcoords.x > gamemap.size.w || tempcoords.y > gamemap.size.h) {
+      return false;
+    }
+    else {
+      p.coords = tempcoords;
+      this.display("story");
+      return true;
     }
   }
 }
