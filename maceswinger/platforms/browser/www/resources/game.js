@@ -37,7 +37,8 @@ function init() {
   ctxmapchange.mozImageSmoothingEnabled = false;
   ctxmapchange.oImageSmoothingEnabled = false;
   ctxmapchange.webkitImageSmoothingEnabled = false;
-  gamemap = new Map(10,10)
+  gamemap = new Map(10,10);
+  gamemap.setplayer(0,0);
   ctx.imageSmoothingEnabled = false;
   ctx.mozImageSmoothingEnabled = false;
   ctx.oImageSmoothingEnabled = false;

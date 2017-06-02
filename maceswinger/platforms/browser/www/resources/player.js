@@ -97,4 +97,10 @@ class player {
     }
     myApp.setProgressbar(document.getElementById("expbar"), (this.exp.cur - this.exp.last) / (this.exp.next - this.exp.last)*100, 1000);
   }
+  move(dir) { // this gets called twice when player moves, for some reason (ink bug?)
+    if (dir == "west") {gamemap.setplayer(this.coords.x-.5,this.coords.y)}
+    else if (dir == "east") {gamemap.setplayer(this.coords.x+.5,this.coords.y)}
+    else if (dir == "north") {gamemap.setplayer(this.coords.x,this.coords.y-.5)}
+    else if (dir == "south") {gamemap.setplayer(this.coords.x,this.coords.y+.5)}
+  }
 }

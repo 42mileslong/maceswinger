@@ -1,3 +1,8 @@
+//town names (copied from my last game)
+var tnamepre = ["New ", "Old ", "West ", "East ", "Outer ", "Inner ", "South ", "North ", "Upper ", "Lower ", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
+var tname1 = ["White", "Brad", "Butter", "Village", "Wig", "Apple", "Chester", "Ash", "Aire", "Strat", "Daven", "Tam", "Whel", "Lowe", "South", "Sud", "Shef", "Ax", "Black", "Burn", "Sar", "Alver", "Staw", "Stan", "North", "Winter", "Spring"];
+var tname2 = ["chapel", "pond", "ston", "ton", "burg", "ville", "dale", "wick", "ford", "port", "worth", "stow", "firth", "shaw", "sworthly", "stone", "ine", "forth", "wich", "beck", "bury", "field", "minster", "bourne", "pool", "mere"];
+
 class Map {
   constructor(width,height) {
     this.map = [];
@@ -52,21 +57,19 @@ class Map {
       this.map[x][y] = new feature(type,x + y)
     }
   }
-  moveplayer(dir) {
-    console.log('k')
-    var tempcoords = p.coords;
-    if (dir == "east") {tempcoords.x++;}
-    else if (dir == "west") {tempcoords.x--;}
-    else if (dir == "north") {tempcoords.y++;}
-    else if (dir == "south") {tempcoords.y--;}
-    if (tempcoords.x < 0 || tempcoords.y < 0 || tempcoords.x > gamemap.size.w || tempcoords.y > gamemap.size.h) {
-      return false;
-    }
-    else {
-      p.coords = tempcoords;
-      this.display("story");
-      return true;
-    }
+  setplayer(x,y) {
+    p.coords.x = x;
+    p.coords.y = y;
+    if (p.coords.y == 0) {story.variablesState["ablenorth"] = false;}
+    else {story.variablesState["ablenorth"] = true;}
+    if (p.coords.y == this.size.h) {story.variablesState["ablesouth"] = false;}
+    else {story.variablesState["ablesouth"] = true;}
+    if (p.coords.x == this.size.w) {story.variablesState["ableeast"] = false;}
+    else {story.variablesState["ableeast"] = true;}
+    if (p.coords.x == 0) {story.variablesState["ablewest"] = false;}
+    else {story.variablesState["ablewest"] = true;}
+    story.variablesState["curlocationname"] = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].name
+    story.variablesState["curlocationtype"] = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].type
   }
 }
 class feature {
@@ -74,9 +77,21 @@ class feature {
     this.type = type;
     this.lv = level;
     this.img = [tiles,0];
-    if (type == "city") {this.img[1] = 1;}
-    else if (type == "village"){this.img[1] = 2;}
-    else if (type == "grass"){this.img[1] = 3;}
+    if (type == "city") {
+      this.name = randlist(tnamepre) + randlist(tname1) + randlist(tname2);
+      this.img[1] = 1;
+    }
+    else if (type == "village") {
+      this.name = randlist(tname1) + randlist(tname2);
+      this.img[1] = 2;
+    }
+    else if (type == "grass") {
+      this.name = "boring old grass";
+      this.img[1] = 3;
+    }
+    else if (type == "dungeon") {
+      this.name = "spooky dungeon";
+    }
   }
 }
 function getpoint(x,y,id) {

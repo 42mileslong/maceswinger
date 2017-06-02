@@ -146,7 +146,7 @@
       var story = new inkjs.Story(storyContent);
       story.BindExternalFunction("fight", function() { p.setstate("fight") });
       story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
-      story.BindExternalFunction("travel", function(direction) { return gamemap.moveplayer(direction) });
+      story.BindExternalFunction("travel", function(direction) {p.move(direction)});
       var storyContainer = document.querySelectorAll('#story')[0];
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";
