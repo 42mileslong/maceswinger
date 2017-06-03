@@ -144,7 +144,7 @@
     <script>
       //https://github.com/TheBerkin/Rant maybe use this?
       var story = new inkjs.Story(storyContent);
-      story.BindExternalFunction("fight", function() { p.setstate("fight") });
+      story.BindExternalFunction("fight", function(type = "normal") { p.setstate("fight",type) });
       story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
       story.BindExternalFunction("travel", function(direction) {p.move(direction)});
       var storyContainer = document.querySelectorAll('#story')[0];

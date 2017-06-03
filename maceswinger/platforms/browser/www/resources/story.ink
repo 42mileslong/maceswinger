@@ -10,10 +10,12 @@ VAR ableeast = false
 VAR ablewest = false
 VAR curlocationtype = ""
 VAR curlocationname = ""
+VAR curlocationlvl = 0
 
-EXTERNAL fight()
+EXTERNAL fight(type)
 EXTERNAL displaymap()
 EXTERNAL travel(direction)
+EXTERNAL newquest()
 
 -> init
 === init ===
@@ -24,29 +26,26 @@ EXTERNAL travel(direction)
     -> move
 
 === move ===
-{~You continue {~walking|trudging|ambling|sauntering|strolling} through the dungeon|As you {~walk|trudge|amble|saunter|stroll} you {~jump|twitch|shriek|squeal} {~at each {~spooky|scary} noise|as additional cobwebs accumulate on your {~face|arms|legs}}}.
+{~You continue {~walking|trudging|ambling|sauntering|strolling} through {curlocationname}|As you {~walk|trudge|amble|saunter|stroll} through {curlocationname} you {~jump|twitch|shriek|squeal} {~at each {~spooky|scary} noise|as additional cobwebs accumulate on your {~face|arms|legs}}|{~The dungeon echoes|Bats fly out of hidden crevices in the ceiling|The {~walls|floor|ceiling} seem to grow more and more {~damp|slimy}} with each step you take}.
 {current_lvl == 0:
     <> Suddenly, you find yourself at the exit! Through the doorway you see a {~forest|marsh|prairie|grassland}{& far below| very far below|}. You appear to be on the side of a {&vast mountain|yuge mountain|small hill}.
 }
-    +   {current_lvl == 0} Leave {curlocationname}.
+    +   {current_lvl == 0} [Leave {curlocationname}.]
         -> exitdungeon
-    +   {current_lvl != 0} Walk towards the light.
+    +   {current_lvl != 0} [Walk towards the light.]
         ~ current_lvl--
-        { current_lvl < 10:
-            ~ fight()
+        { RANDOM(0, 20) > 15:
+            ~ fight("easy")
             -> DONE
         }
         -> move
-    +   {current_lvl < 10} Walk deeper.
+    +   {current_lvl < 10} [Walk deeper.]
         ~ current_lvl++
-        { current_lvl > deepest_lvl:
-            ~ deepest_lvl++
-
-            { RANDOM(0, 20) > 10:
-                ~ fight()
-                -> DONE
-            }
+        { RANDOM(0, 20) > 5:
+            ~ fight("normal")
+            -> DONE
         }
+        -> move
         -> move
     +   {current_lvl == 10} What's that?
         -> boss
@@ -58,19 +57,27 @@ Wow!  You really showed that {curenname}!  Good for you!
 === boss ===
 <> Through the darkness you can barely make out a door conspicuously labeled 'boss fight here!'.  Employing the full might of your superior intellect, you deduce that an enemy substantially stronger than the ones you have previously disposed of within this particular dungeon resides behind the aforementioned door, along with some potentially awesome loot.  Do you proceed?
     +   Yes!
-        ~fight()
+        ~fight("boss")
         -> DONE
     +   [No! (Go back)]No!
         ~ current_lvl++
         -> move
 
 === exitdungeon ===
-You make you way out of the dungeon in the light! The waving fields of grain appeal to you, and you decide where to make your next move.
-    + [Whip out your trusty map.] You whip out your trusty map.
+You make you way out of {curlocationname} in the light! The waving fields of grain appeal to you, and you decide where to make your next move.
+    +   [Whip out your trusty map.] You whip out your trusty map.
         ~displaymap()
         -> map
 
 === city ===
+You enter the city of {curlocationname}, and are blown away by how big it is.  Wow.
+    +   [Talk to the sad looking man.]As you approach the sad looking man, he perks up.
+        -> quest
+    +   [Leave.]{~You've had enough of {curlocationname}, for the time being.|Time to get going - you've got something better to do (hopefully).|{curlocationname}'s boring - time to go!}
+        -> map
+-> DONE
+
+=== quest ===
 placeholder!
 -> DONE
 

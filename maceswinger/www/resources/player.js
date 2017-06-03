@@ -68,16 +68,21 @@ class player {
     }
     p.drop(tempslot);
   }
-  setstate(state) {
+  setstate(state,type="normal") {
     p.state = state;
     if (state == "loot") {
       $("#dodge").attr("disabled","disabled");
       $("#hit").attr("disabled","disabled");
     }
     else if (state == "fight") {
+      var curenlvl = null;
       $("#dodge").removeAttr("disabled");
       $("#hit").removeAttr("disabled");
-      curen = new enemy(Math.max(randint(-2,2) + p.lv,0),randlist(["an","bn","am","bm"]));
+      if (type == "normal") {curenlvl = Math.max(randint(-2,2) + gamemap.curlvl,0);}
+      else if (type == "easy") {curenlvl = Math.max(randint(-4,0) + gamemap.curlvl,0);}
+      else if (type == "hard") {curenlvl = Math.max(randint(0,4) + gamemap.curlvl,0);}
+      else if (type == "boss") {curenlvl = Math.max(randint(2,6) + gamemap.curlvl,0);}
+      curen = new enemy(curenlvl,randlist(["an","bn","am","bm"]));
       togglescreen("fight");
       story.variablesState["curenname"] = curen.name;
       gameloop();

@@ -74,7 +74,8 @@ function scrollQuickToBottom() {
     //$("#main").animate({ scrollTop: 0}, "slow");
   //}
   if (p.state == "story"){
-    $("#main").animate({ scrollTop: $("#story").height()}, "slow");
+    $("#main").animate({ scrollTop: $("#story").height()}, 1);
+    //$("#main").scrollTop($("#story").height());
   }
 }
 
@@ -97,7 +98,7 @@ function continueStory() {
         // Fade in paragraph after a short delay
         showAfter(delay, paragraphElement);
 
-        delay += 200.0;
+        delay += 100.0;
     }
 
     // Create HTML choices from ink choices
@@ -111,7 +112,7 @@ function continueStory() {
 
         // Fade choice in after a short delay
         showAfter(delay, choiceParagraphElement);
-        delay += 200.0;
+        delay += 100.0;
 
         // Click on choice
         var choiceAnchorEl = choiceParagraphElement.querySelectorAll("a")[0];
