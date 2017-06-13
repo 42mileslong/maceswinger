@@ -23,7 +23,7 @@ function gameloop() {
     //ctx.fillText(curen.health,size.w*.75/2,40);
     if (!curen.alive) {
       p.expup(curen.exp);
-        (new Weapon(randint(Math.max(0,curen.lv-4),Math.min(curen.lv-1,materials.length-1)))).prompt();
+        (new Weapon(curen.lv)).prompt();
     }
     window.requestAnimationFrame(gameloop);
   }
