@@ -3,6 +3,7 @@ class player {
     this.name = "";
     this.gold = 0;
     this.health = 0;
+    this.accuracy = 2;
     this.exp = {
       cur: 0,
       next: 100,
@@ -31,8 +32,10 @@ class player {
     this.refreshinv();
   }
   hit(en) {
-    curen.health -= this.weap.dam;
-    curen.update();
+    if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
+      en.health -= this.weap.dam;
+      en.update();
+    }
   }
   drop(id) {
     $(this.inv[id].element).remove();

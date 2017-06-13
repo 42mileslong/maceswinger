@@ -5,7 +5,7 @@ var tname2 = ["chapel", "pond", "ston", "ton", "burg", "ville", "dale", "wick", 
 
 //dungeon names (new)
 var duntype = ["Caverns", "Grotto", "Labyrinth", "Lair", "Vault", "Crypt", "Pits", "Burrows", "Tunnels", "Lair", "Vault", "Catacombs"]
-var dunwhose1 = ["Hol", "Mol", "Smoll", "Mine", "Karl", "Marx", "Dis", "Clum", "Chum", "Grom", "Ill", "A", "Im", "Dun", "Mun", "Ol"]
+var dunwhose1 = ["Hol", "Mol", "Smoll", "Mine", "Karl", "Marx", "Dis", "Clum", "Chum", "Grom", "Ill", "A", "Im", "Dun", "Mun", "Ol", "Smit", "Spit", "Shorn", "Garn", "Meu"]
 var dunwhose2 = ["grim's", "moth's", "dom's", "ant's", "ive's", "spute's"]
 var dundesc = ["Dank", "Dark", "Spooky", "Forgotton", "Misty", "Shrouded", "Sunken", "Bottomless", "Abysmal", "Slimy", "Chilly", "Secluded", "Desecrated", "Forbidden"];
 var dunwhat = ["Demise", "Cry", "Shout", "Downfall", "Lament", "Shriek", "Dispute", "Distress", "Doom", "Peril", "Snare", "Warning"]

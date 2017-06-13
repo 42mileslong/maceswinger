@@ -1,10 +1,25 @@
 function gameloop() {
   ctx.clearRect(0,0,canvas.width,canvas.height)
   if (p.state == "fight") {
+    if (curen.slider.cur >= curen.slider.max) {
+      curen.slider.up = false;
+    }
+    else if (curen.slider.cur <= 0) {
+      curen.slider.up = true;
+    }
+    if (curen.slider.up) {
+      curen.slider.cur += p.accuracy;
+    }
+    else {
+      curen.slider.cur -= p.accuracy;
+    }
     var width = Math.floor(Math.min(size.w*.75,(size.h-410)*11/23));
     var height = Math.floor(Math.min(size.h-410,size.w*23/11*.75));
     ctx.drawImage(healthbar,0,0,(Math.ceil(curen.health/curen.healthmax*21)),2,Math.floor((size.w*.75-width/11*21)/2),0,Math.floor(width/11*curen.health/curen.healthmax*21),Math.floor(height/23*2));
     ctx.drawImage(enemiesimg,curen.type[1]*11,0,11,23,Math.floor((size.w*.75-width)/2),0,width,height);
+    ctx.drawImage(slider,0,0,21,1,Math.floor((size.w*.75-width/11*21)/2),Math.floor(20*height/23),Math.floor(width/11*21),Math.floor(height/23));
+    ctx.drawImage(slider,0,1,Math.round(curen.type[2]/100*21),1,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.range[0]/100*21*width/11), Math.floor(20*height/23), Math.floor(width/11*curen.type[2]/100*21), Math.floor(height/23));
+    ctx.drawImage(slider,0,2,3,6,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.cur/100*21*width/11-3*width/22),Math.floor(18*height/23),Math.floor(width/11*3),Math.floor(height/23*6));
     //ctx.fillText(curen.health,size.w*.75/2,40);
     if (!curen.alive) {
       p.expup(curen.exp);
