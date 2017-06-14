@@ -80,6 +80,11 @@ class Map {
     var curlocation = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)];
     story.variablesState["curlocationname"] = curlocation.name;
     story.variablesState["curlocationtype"] = curlocation.type;
+    if (curlocation.type == "city") {
+      story.variablesState["curprompt1"] = curlocation.quests[0].nextprompt(false);
+      story.variablesState["curprompt2"] = curlocation.quests[1].nextprompt(false);
+      story.variablesState["curprompt3"] = curlocation.quests[2].nextprompt(false);
+    }
     this.curlvl = curlocation.lv;
   }
   returnclostest(type) {

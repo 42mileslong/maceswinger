@@ -13,6 +13,7 @@ class Item {
       src: null
     }
     this.quest = null;
+    this.card_id = ""
   }
   addtoinv(par,place) {
     var idd = "";
@@ -27,7 +28,8 @@ class Item {
     else if (place == "questitempage") {
       par.questinv.push(this);
       this.quest.updatestage();
-      idd = par.questinv.length-1 + "quest"
+      idd = par.quests_taken + "quest"
+      this.card_id = idd;
     }
     var iddd = idd+"content";
     if (this.catagory == "item") {

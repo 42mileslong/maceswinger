@@ -175,7 +175,7 @@
       story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
       story.BindExternalFunction("travel", function(direction) {p.move(direction)});
       story.BindExternalFunction("bossfight", function(way) {gamemap.curfeature().bosslevel = way});
-      story.BindExternalFunction("nextprompt", function(quest) {console.log(gamemap.curfeature().quests);return gamemap.curfeature().quests[quest-1].nextprompt();});
+      story.BindExternalFunction("nextprompt", function(quest,much) {return gamemap.curfeature().quests[quest-1].nextprompt(true,much);});
       story.BindExternalFunction("contprompts", function(quest) {return gamemap.curfeature().quests[quest-1].contprompts();});
       var storyContainer = document.querySelectorAll('#story')[0];
       var enemiesimg = new Image();

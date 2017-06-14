@@ -30,6 +30,9 @@ function gameloop() {
         }
       }
       prompt(items,0);
+      if (gamemap.curfeature().bosslevel) {
+        gamemap.curfeature().bossloot = [];
+      }
     }
     window.requestAnimationFrame(gameloop);
   }
@@ -73,6 +76,12 @@ function init() {
   togglescreen("story");
   window.requestAnimationFrame(gameloop);
   ctx.fillStyle = 'rgba(0, 0, 0)';
+  story.BindExternalFunction("refreshlines", function() {
+    var curlocation = gamemap.map[Math.round(p.coords.x)][Math.round(p.coords.y)];
+    story.variablesState["curprompt1"] = curlocation.quests[0].nextprompt(false);
+    story.variablesState["curprompt2"] = curlocation.quests[1].nextprompt(false);
+    story.variablesState["curprompt3"] = curlocation.quests[2].nextprompt(false);
+  });
   //(new Quest(0)).take()
 }
 function scrollToBottom() {

@@ -19,8 +19,9 @@ EXTERNAL fight(type)
 EXTERNAL displaymap()
 EXTERNAL travel(direction)
 EXTERNAL bossfight(way)
-EXTERNAL nextprompt(quest)
+EXTERNAL nextprompt(quest,howmuch)
 EXTERNAL contprompts(quest)
+EXTERNAL refreshlines()
 
 -> init
 === init ===
@@ -77,14 +78,15 @@ You make you way out of {curlocationname} in the light! The waving fields of gra
         -> map
 
 === city ===
+~refreshlines()
 You enter the city of {curlocationname}, and are blown away by how big it is.  Wow.
-    +   Huh. {curprompt1}
+    +   {contprompts(1) == 1} &nbsp;{curprompt1}
         ~curquest = 1
         -> quest
-    +   Interesting. {curprompt2}
+    +   {contprompts(2) == 1} &nbsp;{curprompt2}
         ~curquest = 2
         -> quest
-    +   Strange. {curprompt3}
+    +   {contprompts(3) == 1} &nbsp;{curprompt3}
         ~curquest = 3
         -> quest
     +   [Leave.]{~You've had enough of {curlocationname}, for the time being.|Time to get going - you've got something better to do (hopefully).|{curlocationname}'s boring - time to go!}
@@ -92,13 +94,12 @@ You enter the city of {curlocationname}, and are blown away by how big it is.  W
 -> DONE
 
 === quest ===
-.{nextprompt(curquest)}
-    * .{nextprompt(curquest)}
-        { contprompts(curquest):
+&nbsp;{nextprompt(curquest,1)}
+    + &nbsp;{nextprompt(curquest,0.5)}&nbsp;
+        {contprompts(curquest) == 1:
             -> quest
-        -else:
-            -> city
         }
+        -> city
 
 === village ===
 placeholder!
@@ -112,6 +113,7 @@ Before you lies the dungeon called {curlocationname}.  Do you wish to enter?
     +   No![] I'm boring, lazy, and a coward - I'm outta here!
         -> map
 === map ===
+~displaymap()
 {~You can almost see your house from here!|The map crinkles as you contemplate your next move.|'Where should I go venture next?' You think to yourself.|Squinting furiously (to no avail), you once again berate yourself for not springing for a larger map.}  You decide to travel...
     +   {ablenorth == true} ...North.
         ~travel("north")
