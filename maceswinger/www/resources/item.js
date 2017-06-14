@@ -113,7 +113,24 @@ function prompt(items,index) {
   document.getElementById(idd).style.top = size.h*1/3 + "px";
   document.getElementById(idd).style.width = "250px";
   document.getElementById(idd).style.position = "absolute";
-  addelement(document.getElementById(idd),"div","card-footer",idd + "foot","<a href='#' class='button' style='width:50%' id='tempadd'><i class='f7-icons'>add</i></a><a href='#' class='button' style='width:50%' id='tempdrop'><i class='f7-icons'>close</i></a>");
+  if (curitem.catagory == "item") {
+    addelement(document.getElementById(idd),"div","card-footer",idd + "foot","<a href='#' class='button' style='width:100%' id='tempadd'><i class='f7-icons'>add</i></a>");
+  }
+  else {
+    addelement(document.getElementById(idd),"div","card-footer",idd + "foot","<a href='#' class='button' style='width:50%' id='tempadd'><i class='f7-icons'>add</i></a><a href='#' class='button' style='width:50%' id='tempdrop'><i class='f7-icons'>close</i></a>");
+    $("#tempdrop").click(function() {
+      curitem.refuse(false);
+      if (index < items.length) {
+        prompt(items, index)
+      }
+      else if (!p.invfull){
+        p.setstate("story")
+      }
+      else {
+        invover(true)
+      }
+    });
+  }
   p.setstate("loot");
   $("#tempadd").click(function() {
     var place = "";
@@ -124,18 +141,6 @@ function prompt(items,index) {
       place = "questitempage";
     }
     curitem.refuse(true,p,place);
-    if (index < items.length) {
-      prompt(items, index)
-    }
-    else if (!p.invfull){
-      p.setstate("story")
-    }
-    else {
-      invover(true)
-    }
-  });
-  $("#tempdrop").click(function() {
-    curitem.refuse(false);
     if (index < items.length) {
       prompt(items, index)
     }

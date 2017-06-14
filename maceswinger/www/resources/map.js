@@ -24,8 +24,9 @@ class Map {
       }
     }
     this.map[0][0] = new feature("dungeon",0);
+    this.map[1][0] = new feature("city",1);
     this.addfeatures("dungeon",19);
-    this.addfeatures("city",2);
+    //this.addfeatures("city",1);
     this.addfeatures("village",5);
 
     this.areahtml = "<map name='maparea' id='areamap'>"
@@ -76,9 +77,10 @@ class Map {
     else {story.variablesState["ableeast"] = true;}
     if (p.coords.x == 0) {story.variablesState["ablewest"] = false;}
     else {story.variablesState["ablewest"] = true;}
-    story.variablesState["curlocationname"] = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].name;
-    story.variablesState["curlocationtype"] = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].type;
-    story.variablesState["curlocationlvl"] = this.curlvl = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].lv;
+    var curlocation = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)];
+    story.variablesState["curlocationname"] = curlocation.name;
+    story.variablesState["curlocationtype"] = curlocation.type;
+    this.curlvl = curlocation.lv;
   }
   returnclostest(type) {
     var closestdist = [69420,this.map[0][0]]
@@ -98,6 +100,15 @@ class Map {
   curfeature() {
     return this.map[p.coords.x][p.coords.y];
   }
+  addquests() {
+    for (var i in this.map) {
+      for (var j in this.map[i]) {
+        if (this.map[i][j].type == "city") {
+          this.map[i][j].quests = [new Quest(this.map[i][j].quests.lv),new Quest(this.map[i][j].quests.lv), new Quest(this.map[i][j].quests.lv)];
+        }
+      }
+    }
+  }
 }
 class feature {
   constructor(type,level) {
@@ -107,6 +118,7 @@ class feature {
     if (type == "city") {
       this.name = randlist(tnamepre) + randlist(tname1) + randlist(tname2);
       this.img[1] = 1;
+      this.quests = [];
     }
     else if (type == "village") {
       this.name = randlist(tname1) + randlist(tname2);

@@ -2,6 +2,10 @@ var difficulty_names = ["Trivial", "Ordinary", "Noteworthy", "Epic", "Heroic", "
 var names_first = ["Tim", "John", "Will", "Gregory", "Isaac", "Jimmy", "Chris", "David"] //temp
 var names_last = ["Newton", "Smith", "Mendel", "Wu"] //temp
 var quest_items = ["Hoe", "Pickaxe", "Tiara", "Fork", "Spoon"] //temp
+var help = ["Can I help?", "Are you OK?", "Is there any way I could assist your dillema?"]
+var and = ["And...", "And?", "Go on.", "Keep talking.", "You were saying..."]
+var affirmative = ["Yup.", "Yep.", "Of course.", "Yes, I am.", "Affirmative."]
+var relatives = ["Mother", "Sister", "Brother", "Father", "Aunt", "Uncle", "Grandfather", "Grandmother"];
 var quest_patterns = [
   ["closefetch"], // difficulty 0
   [], //difficulty 1
@@ -17,7 +21,7 @@ class Quest {
       num: Math.min(Math.floor(lv / 5),5),
       name: difficulty_names[Math.min(Math.floor(lv / 5),5)]
     }
-    this.questpattern = randlist(quest_patterns[this.diff.num]);
+    this.questpattern = randlist(quest_patterns[0]);//this.diff.num]);
     if (this.questpattern == "closefetch") {
       this.giver = {
         fname: randlist(names_first),
@@ -35,10 +39,16 @@ class Quest {
       var tempdun = gamemap.returnclostest("dungeon");
       var tempcity = gamemap.curfeature();
       this.stages = [[tempdun,"Delve into the nearby dungeon of " + tempdun.name + " in search of " + this.item.sdesc + "."],[tempcity,"Return with " + this.item.sdesc + " to " + tempcity.name + "."]];
+      this.start = ["Investigate the soft whimpering emitting from a nearby alleyway.","You see a despondant man crying silently in the back of the alley, rocking back and forth in the fetal position.  Which is kinda disgusting, considering the refuse blanketing the ground.","Make uncomfortable eye contact.","The man stares back. 'Help!' he cries, somewhat awkwardly.", randlist[help],"'Well, I guess,' the man sniffles.  His nose is running profusely. 'You see, I...lost an important family heirloom while courousing last night in the countryside.'", randlist[and],"'It's my treasured " + this.item.name + " - my " + randlist[relatives] + "'s going to be very upset!'","Fine, I'll help.","'You will?  Great! I'm pretty sure it (somehow) ended up inside " + tempdun + ".  You could try looking there.  By the way, I'm " + this.giver.fname + ". Now get going!'","Leave " + this.giver.fname + "."];
+      this.end = [["Talk to " + this.giver.fname + ".","'You're back? Already? Wait - you don't have my " + this.item.name + " yet, don't you.  Don't come back until you do."],["Talk to " + this.giver.fname + ".", "Wow, you found it?  Great!","Yes, great.", "You're probably expecting some sort of reward, aren't you? '",randlist[affirmative],"'Well, here you go then.  See you around!'","Do me a favor and hold onto that " + this.item.name + "."]];
+      this.curprompt = this.start;
+      this.curpromptindex = 0;
     }
   }
   take() {
     p.quests_taken++;
+    this.curprompt = this.end[0];
+    this.curpromptindex = 0;
     this.stages[0][0].addbossloot(this.item);
     this.parid = "quest"+p.quests_taken;
     addelement(document.getElementById("questpage"),"div","card",this.parid);
@@ -50,5 +60,21 @@ class Quest {
   updatestage() {
     this.stage++;
     document.getElementById(this.parid + "footer").innerHTML = this.stages[this.stage][1];
+    if (this.stage = this.stages.length-1) {
+      this.curprompt = this.end[1];
+    }
+  }
+  nextprompt() {
+    this.curpromptindex++;
+    return this.curprompt[this.curpromptindex-1]
+  }
+  contprompts() {
+    if (this.curpromptindex < this.curprompt.length) {
+      return true;
+    }
+    else {
+      this.take();
+      return false;
+    }
   }
 }

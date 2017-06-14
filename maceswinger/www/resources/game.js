@@ -60,6 +60,7 @@ function init() {
   ctxmapchange.webkitImageSmoothingEnabled = false;
   gamemap = new Map(10,10);
   gamemap.setplayer(0,0);
+  gamemap.addquests();
   ctx.imageSmoothingEnabled = false;
   ctx.mozImageSmoothingEnabled = false;
   ctx.oImageSmoothingEnabled = false;
@@ -72,7 +73,7 @@ function init() {
   togglescreen("story");
   window.requestAnimationFrame(gameloop);
   ctx.fillStyle = 'rgba(0, 0, 0)';
-  (new Quest(0)).take()
+  //(new Quest(0)).take()
 }
 function scrollToBottom() {
     var progress = 0.0;

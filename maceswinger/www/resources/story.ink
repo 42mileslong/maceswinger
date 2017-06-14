@@ -8,15 +8,19 @@ VAR ablenorth = false
 VAR ablesouth = false
 VAR ableeast = false
 VAR ablewest = false
-VAR curlocationtype = ""
 VAR curlocationname = ""
-VAR curlocationlvl = 0
+VAR curlocationtype = ""
+VAR curprompt1 = ""
+VAR curprompt2 = ""
+VAR curprompt3 = ""
+VAR curquest = ""
 
 EXTERNAL fight(type)
 EXTERNAL displaymap()
 EXTERNAL travel(direction)
-EXTERNAL newquest()
 EXTERNAL bossfight(way)
+EXTERNAL nextprompt(quest)
+EXTERNAL contprompts(quest)
 
 -> init
 === init ===
@@ -74,15 +78,27 @@ You make you way out of {curlocationname} in the light! The waving fields of gra
 
 === city ===
 You enter the city of {curlocationname}, and are blown away by how big it is.  Wow.
-    +   [Talk to the sad looking man.]As you approach the sad looking man, he perks up.
+    +   Huh. {curprompt1}
+        ~curquest = 1
+        -> quest
+    +   Interesting. {curprompt2}
+        ~curquest = 2
+        -> quest
+    +   Strange. {curprompt3}
+        ~curquest = 3
         -> quest
     +   [Leave.]{~You've had enough of {curlocationname}, for the time being.|Time to get going - you've got something better to do (hopefully).|{curlocationname}'s boring - time to go!}
         -> map
 -> DONE
 
 === quest ===
-placeholder!
--> DONE
+.{nextprompt(curquest)}
+    * .{nextprompt(curquest)}
+        { contprompts(curquest):
+            -> quest
+        -else:
+            -> city
+        }
 
 === village ===
 placeholder!
