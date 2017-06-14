@@ -47,13 +47,25 @@
           <div class="navbar">
             <div class="navbar-inner">
               <div class="left"></div>
-              <div class="center">Inventory</div>
+              <div class="center">
+                <div class="buttons-row" width="300px">
+                  <a href="#weaponitempage" class="tab-link active button">&nbsp;&nbsp;Weapons...&nbsp;&nbsp;</a>
+                  <a href="#questitempage" class="tab-link button">Quest Items...</a>
+                </div>
+              </div>
               <div class="right"></div>
             </div>
           </div>
           <div class="page-content">
-            <div id = "eqweap" style="background-color:purple"></div>
-            <div id = "invw"></div>
+            <div class="tabs-animated-wrap">
+              <div class="tabs">
+                <div id="weaponitempage" class="tab active">
+                  <div id = "eqweap" style="background-color:purple"></div>
+                  <div id = "invw"></div>
+                </div>
+                <div id="questitempage" class="tab"></div>
+              </div>
+            </div>
           </div>
                 <!--<div class="card weapselected">
                   <div class = "card-header">Meme</div>
@@ -67,11 +79,25 @@
             <div class="navbar">
               <div class="navbar-inner">
                 <div class="left"></div>
-                <div class="center">Map</div>
+                <div class="center" width="300px">
+                  <div class="buttons-row" width="300px">
+                    <a href="#questpage" class="tab-link active button">&nbsp;Quests...</a>
+                    <a href="#statspage" class="tab-link button">&nbsp;&nbsp;Stats...&nbsp;&nbsp;</a>
+                  </div>
+                </div>
                 <div class="right"></div>
               </div>
             </div>
-            <div class="page-content" id="mapcontent" style="width:240px;overflow-x:auto"></div>
+            <div class="page-content">
+              <div class="tabs-animated-wrap">
+                <div class="tabs">
+                  <div id="questpage" class="tab active"></div>
+                  <div id="statspage" class="tab">
+                   Stats here
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
   </div>
@@ -105,7 +131,7 @@
                     <!-- Scrollable page content -->
                   <div class="page-content" id="main">
                     <div id="story" class="container">
-                        <h1>story</h1>
+                        <h1>Mace Swinger</h1>
                     </div>
                     <div class="content-block" id="fight">
                         <canvas id="screen" style="margin:auto;display:block"></canvas>
@@ -141,12 +167,14 @@
     <script src="resources/story.js"></script>
     <script src="resources/item.js"></script>
     <script src="resources/map.js"></script>
+    <script src="resources/quest.js"></script>
     <script>
       //https://github.com/TheBerkin/Rant maybe use this?
       var story = new inkjs.Story(storyContent);
       story.BindExternalFunction("fight", function(type = "normal") { p.setstate("fight",type) });
       story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
       story.BindExternalFunction("travel", function(direction) {p.move(direction)});
+      story.BindExternalFunction("bossfight", function(way) {gamemap.curfeature().bosslevel = way});
       var storyContainer = document.querySelectorAll('#story')[0];
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";

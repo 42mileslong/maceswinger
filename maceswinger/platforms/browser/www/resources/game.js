@@ -23,7 +23,13 @@ function gameloop() {
     //ctx.fillText(curen.health,size.w*.75/2,40);
     if (!curen.alive) {
       p.expup(curen.exp);
-        (new Weapon(curen.lv)).prompt();
+      var items = [new Weapon(curen.lv)];
+      if (gamemap.curfeature().bosslevel) {
+        for (var i in gamemap.curfeature().bossloot) {
+          items.push(gamemap.curfeature().bossloot[i]);
+        }
+      }
+      prompt(items,0);
     }
     window.requestAnimationFrame(gameloop);
   }
@@ -66,6 +72,7 @@ function init() {
   togglescreen("story");
   window.requestAnimationFrame(gameloop);
   ctx.fillStyle = 'rgba(0, 0, 0)';
+  (new Quest(0)).take()
 }
 function scrollToBottom() {
     var progress = 0.0;
@@ -202,6 +209,7 @@ function resize() {
 }
 function invover(way) {
   var ico = document.getElementById("invicon");
+  p.invfull = way;
   if (way) {
     $(ico).addClass("color-red");
     var idd = "temp";

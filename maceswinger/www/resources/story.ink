@@ -16,6 +16,7 @@ EXTERNAL fight(type)
 EXTERNAL displaymap()
 EXTERNAL travel(direction)
 EXTERNAL newquest()
+EXTERNAL bossfight(way)
 
 -> init
 === init ===
@@ -57,9 +58,11 @@ Wow!  You really showed that {curenname}!  Good for you!
 === boss ===
 <> Through the darkness you can barely make out a door conspicuously labeled 'boss fight here!'.  Employing the full might of your superior intellect, you deduce that an enemy substantially stronger than the ones you have previously disposed of within this particular dungeon resides behind the aforementioned door, along with some potentially awesome loot.  Do you proceed?
     +   Yes!
+        ~bossfight(true)
         ~fight("boss")
         -> DONE
     +   [No! (Go back)]No!
+        ~bossfight(false)
         ~ current_lvl++
         -> move
 

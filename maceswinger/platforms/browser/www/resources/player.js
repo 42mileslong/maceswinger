@@ -11,7 +11,9 @@ class player {
     }
     this.lv = 1;
     this.inv = [];
+    this.questinv = [];
     this.invsize = 2;
+    this.invfull = false;
     var we = new Weapon(0,"handz");
     we.addtoinv(this,"eqweap");
     this.state = "story";
@@ -20,6 +22,7 @@ class player {
       x: 0,
       y: 0,
     }
+    this.quests_taken = 0;
   }
   equipweap(invslot) {
     $(this.weap.element).remove();

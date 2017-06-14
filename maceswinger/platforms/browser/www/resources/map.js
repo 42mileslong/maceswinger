@@ -80,6 +80,24 @@ class Map {
     story.variablesState["curlocationtype"] = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].type;
     story.variablesState["curlocationlvl"] = this.curlvl = this.map[Math.round(p.coords.x)][Math.round(p.coords.y)].lv;
   }
+  returnclostest(type) {
+    var closestdist = [69420,this.map[0][0]]
+    for (let i = 0; i < this.map.length; i++) {
+      for (let j = 0; j < this.map[i].length; j++) {
+        if (this.map[i][j].type == type) {
+          var dist = Math.sqrt(Math.pow(p.coords.x - i,2) + Math.pow(p.coords.y-j,2));
+          if (dist < closestdist[0]) {
+            closestdist[0] = dist;
+            closestdist[1] = this.map[i][j];
+          }
+        }
+      }
+    }
+    return closestdist[1];
+  }
+  curfeature() {
+    return this.map[p.coords.x][p.coords.y];
+  }
 }
 class feature {
   constructor(type,level) {
@@ -101,7 +119,14 @@ class feature {
     else if (type == "dungeon") {
       if (randint(0,1) == 1) {this.name = randlist(dunwhose1) + randlist(dunwhose2) + " " + randlist(dundesc) + " " + randlist(duntype);}
       else {this.name = randlist(dunwhose1) + randlist(dunwhose2) + " " + randlist(dunwhat);}
-      console.log(this.name)
+      //console.log(this.name)
+      this.bossloot = [];
+      this.bosslevel = false;
+    }
+  }
+  addbossloot(item) {
+    if (this.type == "dungeon") {
+      this.bossloot.push(item);
     }
   }
 }

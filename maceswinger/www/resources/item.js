@@ -2,12 +2,17 @@ var materials = ["Wooden", "Stone", "Bone", "Copper", "Lead", "Iron", "Brass", "
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
 var craft = [["",0],["Pointy ",1],["Broken ",-2]];
 class Item {
-  constructor(desc,name) {
+  constructor(desc,whose,name) {
     this.element = null;
     this.buttons = null;
     this.catagory = "item";
     this.name = name;
+    this.sdesc = whose + "'s " + name;
     this.desc = desc;
+    this.img = {
+      src: null
+    }
+    this.quest = null;
   }
   addtoinv(par,place) {
     var idd = "";
@@ -18,6 +23,11 @@ class Item {
     else if (place == "eqweap") {
       par.weap = this;
       idd = "curweap";
+    }
+    else if (place == "questitempage") {
+      par.questinv.push(this);
+      this.quest.updatestage();
+      idd = par.questinv.length-1 + "quest"
     }
     var iddd = idd+"content";
     if (this.catagory == "item") {
@@ -37,29 +47,6 @@ class Item {
       });
     }
   }
-  prompt() {
-    var idd = "temp";
-    var iddd = "temp2";
-    if (this.catagory == "weapon") {
-      this.createweaponcard(idd,iddd,"main");
-    }
-    else if (this.catagory == "item") {
-      this.createitemcard(idd,iddd,"main");
-    }
-    document.getElementById(idd).style.left = size.w/2-135 + "px";
-    document.getElementById(idd).style.top = size.h*1/3 + "px";
-    document.getElementById(idd).style.width = "250px";
-    document.getElementById(idd).style.position = "absolute";
-    addelement(document.getElementById(idd),"div","card-footer",idd + "foot","<a href='#' class='button' style='width:50%' id='tempadd'><i class='f7-icons'>add</i></a><a href='#' class='button' style='width:50%' id='tempdrop'><i class='f7-icons'>close</i></a>");
-    var parr = this;
-    p.setstate("loot");
-    $("#tempadd").click(function() {
-      parr.refuse(true,p,"invw");
-    });
-    $("#tempdrop").click(function() {
-      parr.refuse(false);
-    });
-  }
   createweaponcard(idd,iddd,place) {
     addelement(document.getElementById(place),"div","card",idd);
     addelement(document.getElementById(idd),"div","card-header",idd + "head",this.name);
@@ -70,27 +57,21 @@ class Item {
     addelement(document.getElementById(place),"div","card",idd);
     addelement(document.getElementById(idd),"div","card-header",idd + "head",this.name);
     addelement(document.getElementById(idd),"div","card-content",iddd);
-    addelement(document.getElementById(iddd),"div","card-content-inner",null,this.desc + "<img style='position:absolute;bottom:1px;right:20px;z-index:3' src=\"" + this.img.src + "\"></img>");
+    addelement(document.getElementById(iddd),"div","card-content-inner",null,this.desc);// + "<img style='position:absolute;bottom:1px;right:20px;z-index:3' src=\"" + this.img.src + "\"></img>");
   }
   refuse(selected,par=null,place=null) {
     document.getElementById("temp").remove();
     if (selected) {
       this.addtoinv(par,place);
       if (p.inv.length > p.invsize) {
-        invover(true);
+        p.invfull = true;
       }
-      else {
-        p.setstate("story");
-      }
-    }
-    else {
-      p.setstate("story");
     }
   }
 }
 class Weapon extends Item {
-  constructor(lv,name = null) {
-    super("A weapon.",null);
+  constructor(lv,name = null,whose = null) {
+    super("A weapon.",null,null);
     this.lv = lv;
     this.catagory = "weapon";
     if (name == "handz") {
@@ -116,6 +97,55 @@ class Weapon extends Item {
     this.img.src = change.toDataURL("image/png");
     ctxchange.clearRect(0,0,64,128);
   }
+}
+function prompt(items,index) {
+  var idd = "temp";
+  var iddd = "temp2";
+  var curitem = items[index];
+  index++;
+  if (curitem.catagory == "weapon") {
+    curitem.createweaponcard(idd,iddd,"main");
+  }
+  else if (curitem.catagory == "item") {
+    curitem.createitemcard(idd,iddd,"main");
+  }
+  document.getElementById(idd).style.left = size.w/2-135 + "px";
+  document.getElementById(idd).style.top = size.h*1/3 + "px";
+  document.getElementById(idd).style.width = "250px";
+  document.getElementById(idd).style.position = "absolute";
+  addelement(document.getElementById(idd),"div","card-footer",idd + "foot","<a href='#' class='button' style='width:50%' id='tempadd'><i class='f7-icons'>add</i></a><a href='#' class='button' style='width:50%' id='tempdrop'><i class='f7-icons'>close</i></a>");
+  p.setstate("loot");
+  $("#tempadd").click(function() {
+    var place = "";
+    if (curitem.catagory == "weapon") {
+      place = "invw";
+    }
+    else if (curitem.catagory == "item") {
+      place = "questitempage";
+    }
+    curitem.refuse(true,p,place);
+    if (index < items.length) {
+      prompt(items, index)
+    }
+    else if (!p.invfull){
+      p.setstate("story")
+    }
+    else {
+      invover(true)
+    }
+  });
+  $("#tempdrop").click(function() {
+    curitem.refuse(false);
+    if (index < items.length) {
+      prompt(items, index)
+    }
+    else if (!p.invfull){
+      p.setstate("story")
+    }
+    else {
+      invover(true)
+    }
+  });
 }
 function addelement(par,type,clas,id=null,html=null,style=null) {
   var ele = document.createElement(type);
