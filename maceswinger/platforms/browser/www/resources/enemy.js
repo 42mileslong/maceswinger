@@ -1,8 +1,8 @@
 var entypes = [
-  [["Knight",2,30]],//above normal
-  [["Bat",3,10]],//below normal
-  [["Shrubbery",1,40]], //above magical
-  [["Skeleton",0,30]], //below magical
+  [["Knight",2,30],["Afroman?",4,50],["Meerkat",8,20]],//above normal
+  [["Bat",3,10],["Rat",6,20]],//below normal
+  [["Shrubbery",1,40],["Ogre",5,40]], //above magical
+  [["Skeleton",0,30],["Goblin",7,30]], //below magical
 ]
 class enemy {
   constructor(lv,area) {
