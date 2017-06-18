@@ -3,7 +3,7 @@ class player {
     this.name = "";
     this.gold = 0;
     this.health = 0;
-    this.accuracy = 2;
+    this.accuracy = 1;
     this.exp = {
       cur: 0,
       next: 100,
@@ -22,7 +22,10 @@ class player {
       x: 0,
       y: 0,
     }
-    this.quests_taken = 0;
+    this.stats = {
+      quests_taken: 0,
+      enemies_killed: 0,
+    }
   }
   equipweap(invslot) {
     $(this.weap.element).remove();
@@ -36,7 +39,9 @@ class player {
   }
   hit(en) {
     if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
-      en.health -= this.weap.dam;
+      var dam = this.weap.getdam();
+      en.health -= dam;
+      en.damnums.push(new Damnum(dam));
       en.update();
     }
   }
@@ -113,5 +118,8 @@ class player {
     else if (dir == "east") {gamemap.setplayer(this.coords.x+.5,this.coords.y)}
     else if (dir == "north") {gamemap.setplayer(this.coords.x,this.coords.y-.5)}
     else if (dir == "south") {gamemap.setplayer(this.coords.x,this.coords.y+.5)}
+  }
+  updatestats() {
+    document.getElementById("statspage").innerHTML = "Enemies killed: " + this.stats.enemies_killed + "<br />Quests taken: " + this.stats.quests_taken;
   }
 }

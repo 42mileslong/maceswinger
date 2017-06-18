@@ -9,7 +9,8 @@ class enemy {
     this.lv = lv;
     this.slider = {
       max: 100,
-      cur: 100,
+      step: 0,
+      cur: 0,
       range: null,
     }
     //this.weapon = new Weapon(lv);
@@ -31,10 +32,13 @@ class enemy {
     }
     this.name = this.type[0];
     this.slider.range = [Math.floor(this.slider.max/2 - this.type[2]/2),Math.floor(this.slider.max/2 + this.type[2]/2)];
+    this.damnums = [];
   }
   update() {
     if (this.health <= 0) {
       this.kill();
+      p.stats.enemies_killed++;
+      p.updatestats();
     }
   }
   kill() {

@@ -1,18 +1,11 @@
 function gameloop() {
   ctx.clearRect(0,0,canvas.width,canvas.height)
   if (p.state == "fight") {
-    if (curen.slider.cur >= curen.slider.max) {
-      curen.slider.up = false;
+    curen.slider.step += Math.PI/100*p.accuracy;
+    if (curen.slider.step >= 100) {
+      curen.slider.step = 0;
     }
-    else if (curen.slider.cur <= 0) {
-      curen.slider.up = true;
-    }
-    if (curen.slider.up) {
-      curen.slider.cur += p.accuracy;
-    }
-    else {
-      curen.slider.cur -= p.accuracy;
-    }
+    curen.slider.cur = Math.sin(curen.slider.step)*50+50
     var width = Math.floor(Math.min(size.w*.75,(size.h-410)*11/23));
     var height = Math.floor(Math.min(size.h-410,size.w*23/11*.75));
     ctx.drawImage(healthbar,0,0,(Math.ceil(curen.health/curen.healthmax*21)),2,Math.floor((size.w*.75-width/11*21)/2),0,Math.floor(width/11*curen.health/curen.healthmax*21),Math.floor(height/23*2));
@@ -20,6 +13,14 @@ function gameloop() {
     ctx.drawImage(slider,0,0,21,1,Math.floor((size.w*.75-width/11*21)/2),Math.floor(20*height/23),Math.floor(width/11*21),Math.floor(height/23));
     ctx.drawImage(slider,0,1,Math.round(curen.type[2]/100*21),1,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.range[0]/100*21*width/11), Math.floor(20*height/23), Math.floor(width/11*curen.type[2]/100*21), Math.floor(height/23));
     ctx.drawImage(slider,0,2,3,6,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.cur/100*21*width/11-3*width/22),Math.floor(18*height/23),Math.floor(width/11*3),Math.floor(height/23*6));
+    for (var i = 0; i < curen.damnums.length; i++) {
+      if (!curen.damnums[i].dead) {
+        curen.damnums[i].update();
+        ctx.globalAlpha = curen.damnums[i].curalpha;
+        ctx.drawImage(curen.damnums[i].img,Math.floor((size.w*.75-width/11*21)/2+width/11*curen.damnums[i].coords.x),Math.floor(curen.damnums[i].coords.y*height/23),Math.floor(width/11*125),Math.floor(height/5*25));
+      }
+    }
+    ctx.globalAlpha = 1;
     //ctx.fillText(curen.health,size.w*.75/2,40);
     if (!curen.alive) {
       p.expup(curen.exp);
@@ -73,6 +74,7 @@ function init() {
   ctxchange.oImageSmoothingEnabled = false;
   ctxchange.webkitImageSmoothingEnabled = false;
   p.equipweap(0);
+  p.updatestats();
   togglescreen("story");
   window.requestAnimationFrame(gameloop);
   ctx.fillStyle = 'rgba(0, 0, 0)';
@@ -255,5 +257,39 @@ function togglescreen(way) {
   }
   else {
     console.log("error in switching screen");
+  }
+}
+class Damnum {
+  constructor(amount) {
+    var stringint = amount+""
+    while (stringint[stringint.length-1] == "0" || stringint[stringint.length-1] == ".") {
+      stringint = stringint.substring(0, stringint.length - 1);
+    }
+    ctxmapchange.clearRect(0,0,mapchange.width,mapchange.height)
+    var offset = 0;
+    for (var i = 0; i < stringint.length; i++) {
+      if (stringint[i] != ".") {
+        ctxmapchange.drawImage(damnums,parseInt(stringint[i])*5,0,5,5,i*5-offset,0,5,5);
+      }
+      else {
+        offset = 2
+        ctxmapchange.drawImage(damnums,0,1,2,2,i*5+1,3,2,2)
+      }
+    }
+    this.img = new Image();
+    this.img.src = mapchange.toDataURL();
+    this.curalpha = 1
+    this.dead = false;
+    this.coords = {
+      x: randint(0,6),
+      y: randint(2,18)
+    }
+  }
+  update() {
+    this.curalpha -= .005;
+    this.coords.y += 0.01;
+    if (this.curalpha < 0.02) {
+      this.dead = true;
+    }
   }
 }

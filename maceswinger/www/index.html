@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://ajax.googleapis.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://ajax.googleapis.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000 ws://192.168.1.116:3000">
 
 
     <!-- Required meta tags-->
@@ -92,9 +92,7 @@
               <div class="tabs-animated-wrap">
                 <div class="tabs">
                   <div id="questpage" class="tab active"></div>
-                  <div id="statspage" class="tab">
-                   Stats here
-                  </div>
+                  <div id="statspage" class="tab"></div>
                 </div>
               </div>
             </div>
@@ -188,6 +186,8 @@
       tiles.src = "resources/tiles/mapicons.png";
       var slider = new Image();
       slider.src = "resources/slider.png";
+      var damnums = new Image();
+      damnums.src = "resources/damnums.png";
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -209,6 +209,7 @@
       var myApp = new Framework7({
           swipePanel: 'both',
       });
+      var curquestindex = 0;
       var gamemap = null;
       window.onload = function() {
         resize();

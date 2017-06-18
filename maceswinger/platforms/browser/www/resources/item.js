@@ -1,8 +1,8 @@
 var materials = ["Wooden", "Stone", "Bone", "Copper", "Lead", "Iron", "Brass", "Silver", "Bronze", "Steel", "Golden", "Obsidian", "Diamond"];
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
-var craft = [["",0],["Pointy ",1],["Broken ",-2]];
+var craft = [["",0],["Pointy ",1],["Broken ",-2],["Rusty ",-1]];
 class Item {
-  constructor(desc,whose,name) {
+  constructor(desc,whose,name,id="") {
     this.element = null;
     this.buttons = null;
     this.catagory = "item";
@@ -13,7 +13,8 @@ class Item {
       src: null
     }
     this.quest = null;
-    this.card_id = ""
+    this.idnum = id;
+    this.card_id = id + "quest";
   }
   addtoinv(par,place) {
     var idd = "";
@@ -28,8 +29,7 @@ class Item {
     else if (place == "questitempage") {
       par.questinv.push(this);
       this.quest.updatestage();
-      idd = par.quests_taken + "quest"
-      this.card_id = idd;
+      idd = this.card_id;
     }
     var iddd = idd+"content";
     if (this.catagory == "item") {
@@ -85,10 +85,7 @@ class Weapon extends Item {
     else {
       this.type = randint(0,types.length-1);
       this.swing = types[this.type][1];
-      this.craft = 0;
-      if (randint(0,1) == 1) {
-        this.craft = randint(1,craft.length-1);
-      }
+      this.craft = randint(0,craft.length-1);
       this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0];
     }
     this.dam = ((this.lv*2 + 4 + (this.lv+1)/2*craft[this.craft][1])*(Math.pow(this.swing,1.1))).toFixed(2);
@@ -98,6 +95,9 @@ class Weapon extends Item {
     ctxchange.drawImage(weapsimg, (this.type + this.craft*3) * 16,8 + 3*32,16,32,0,0,64,128);
     this.img.src = change.toDataURL("image/png");
     ctxchange.clearRect(0,0,64,128);
+  }
+  getdam() {
+    return this.dam;
   }
 }
 function prompt(items,index) {

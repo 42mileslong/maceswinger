@@ -21,13 +21,15 @@ class Quest {
       num: Math.min(Math.floor(lv / 5),5),
       name: difficulty_names[Math.min(Math.floor(lv / 5),5)]
     }
+    this.questindex = curquestindex;
+    curquestindex++;
     this.questpattern = randlist(quest_patterns[0]);//this.diff.num]);
     if (this.questpattern == "closefetch") {
       this.giver = {
         fname: randlist(names_first),
         lname: randlist(names_last)
       }
-      this.item = new Item("temp",this.giver.fname + " " + this.giver.lname,randlist(quest_items));
+      this.item = new Item("temp",this.giver.fname + " " + this.giver.lname,randlist(quest_items),this.questindex);
       this.name = "Fetch " + this.item.sdesc;
       this.item.desc = "An item required by " + this.giver.fname + " to complete the quest '" + this.name + "'.";
       this.item.quest = this;
@@ -40,20 +42,21 @@ class Quest {
       var tempcity = gamemap.returnclostest("city");
       this.stages = [[tempdun,"Delve into the nearby dungeon of " + tempdun.name + " in search of " + this.item.sdesc + "."],[tempcity,"Return with " + this.item.sdesc + " to " + tempcity.name + "."]];
       this.start = ["Investigate the soft whimpering emitting from a nearby alleyway.","You see a despondant man crying silently in the back of the alley, rocking back and forth in the fetal position.  Which is kinda disgusting, considering the refuse blanketing the ground.","Make uncomfortable eye contact.","The man stares back. 'Help!' he cries, somewhat awkwardly.", randlist(help)+"","'Well, I guess,' the man sniffles.  His nose is running profusely. 'You see, I...lost an important family heirloom while courousing last night in the countryside.'", randlist(and)+"","'It's my treasured " + this.item.name + " - my " + randlist(relatives) + "'s going to be very upset!'","Fine, I'll help.","'You will?  Great! I'm pretty sure it (somehow) ended up inside " + tempdun.name + ".  You could try looking there.  By the way, I'm " + this.giver.fname + ". Now get going!'","Leave " + this.giver.fname + "."];
-      this.end = [["Talk to " + this.giver.fname + ".","'You're back? Already? Wait - you don't have my " + this.item.name + " yet, don't you.  Don't come back until you do.",randlist(affirmative)+""],["Talk to " + this.giver.fname + ".", "'Wow, you found it?  Great!'","Yes, great.", "'You're probably expecting some sort of reward, aren't you? '",randlist(affirmative)+"","'Well, here you go then.  See you around!'","Do me a favor and hold onto that " + this.item.name + "."]];
+      this.end = [["Talk to " + this.giver.fname + ".","'You're back? Already? Wait - you don't have my " + this.item.name + " yet, don't you.  Don't come back until you do.",randlist(affirmative)+""],["Talk to " + this.giver.fname + ".", "'Wow, you found it?  Great!'","Yes, great.", "'You're probably expecting some sort of reward, aren't you?'",randlist(affirmative)+"","'Well, here you go then.  See you around!'","Do me a favor and hold onto that " + this.item.name + "."]];
       this.curprompt = this.start;
       this.curpromptindex = 0;
       this.recentlytaken = false;
     }
   }
   take() {
-    p.quests_taken++;
+    p.stats.quests_taken++;
+    p.updatestats();
     this.recentlytaken = true;
     this.curprompt = this.end[0];
     this.curpromptindex = 0;
     this.stage = 0;
     this.stages[0][0].addbossloot(this.item);
-    this.parid = "quest"+p.quests_taken;
+    this.parid = "quest"+p.stats.quests_taken;
     addelement(document.getElementById("questpage"),"div","card",this.parid);
     addelement(document.getElementById(this.parid),"div","card-header",this.parid + "head",this.name);
     addelement(document.getElementById(this.parid),"div","card-content",this.parid + "wrapper");
