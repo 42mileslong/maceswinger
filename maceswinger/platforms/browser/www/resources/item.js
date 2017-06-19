@@ -2,7 +2,7 @@ var materials = ["Wooden", "Stone", "Bone", "Copper", "Lead", "Iron", "Brass", "
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
 var craft = [["",0],["Pointy ",1],["Broken ",-2],["Rusty ",-1]];
 class Item {
-  constructor(desc,whose,name,id="") {
+  constructor(desc,whose,name,id="",quest = null) {
     this.element = null;
     this.buttons = null;
     this.catagory = "item";
@@ -12,9 +12,9 @@ class Item {
     this.img = {
       src: null
     }
-    this.quest = null;
+    this.quest = quest;
     this.idnum = id;
-    this.card_id = id + "quest";
+    this.card_id = "q" + id[0] + "i" + id[1];
   }
   addtoinv(par,place) {
     var idd = "";
@@ -88,7 +88,7 @@ class Weapon extends Item {
       this.craft = randint(0,craft.length-1);
       this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0];
     }
-    this.dam = ((this.lv*2 + 4 + (this.lv+1)/2*craft[this.craft][1])*(Math.pow(this.swing,1.1))).toFixed(2);
+    this.dam = ((this.lv*2 + 4 + (this.lv+1)/4*craft[this.craft][1])*(Math.pow(this.swing,1.075))).toFixed(2);
     this.damps = (this.dam/this.swing).toFixed(2);
     this.img = new Image(64,128);
     ctxchange.drawImage(weapsimg, this.lv * 16,8 + this.type*32,16,32,0,0,64,128);

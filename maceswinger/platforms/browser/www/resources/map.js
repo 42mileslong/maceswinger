@@ -88,19 +88,21 @@ class Map {
     this.curlvl = curlocation.lv;
   }
   returnclostest(type) {
-    var closestdist = [69420,this.map[0][0]]
+    var closestdist = [[69420,this.map[0][0]]]
     for (let i = 0; i < this.map.length; i++) {
       for (let j = 0; j < this.map[i].length; j++) {
         if (this.map[i][j].type == type) {
           var dist = Math.sqrt(Math.pow(p.coords.x - i,2) + Math.pow(p.coords.y-j,2));
-          if (dist < closestdist[0]) {
-            closestdist[0] = dist;
-            closestdist[1] = this.map[i][j];
+          for (var k = 0; k < closestdist.length; k++) {
+            if (dist < closestdist[k][0]) {
+              closestdist.splice(k,0,[dist,this.map[i][j]]);
+              break
+            }
           }
         }
       }
     }
-    return closestdist[1];
+    return closestdist;
   }
   curfeature() {
     return this.map[p.coords.x][p.coords.y];
