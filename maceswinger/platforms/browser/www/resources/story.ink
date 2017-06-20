@@ -13,7 +13,11 @@ VAR curlocationtype = ""
 VAR curprompt1 = ""
 VAR curprompt2 = ""
 VAR curprompt3 = ""
+VAR questtype1 = ""
+VAR questtype2 = ""
+VAR questtype3 = ""
 VAR curquest = ""
+VAR curqueststart = ""
 
 EXTERNAL fight(type)
 EXTERNAL displaymap()
@@ -22,6 +26,8 @@ EXTERNAL bossfight(way)
 EXTERNAL nextprompt(quest,howmuch)
 EXTERNAL contprompts(quest)
 EXTERNAL refreshlines()
+EXTERNAL getinkquest(which)
+EXTERNAL takeinkquest(which)
 
 -> init
 === init ===
@@ -82,22 +88,41 @@ You make you way out of {curlocationname} in the light! The waving fields of gra
 You enter the city of {curlocationname}, and are blown away by how big it is.  Wow.
     +   {contprompts(1) == 1} &nbsp;{curprompt1}
         ~curquest = 1
-        -> quest
+        {questtype1 == "js":
+            -> questjs
+        -else:
+            -> questink
+        }
     +   {contprompts(2) == 1} &nbsp;{curprompt2}
         ~curquest = 2
-        -> quest
+        {questtype2 == "js":
+            -> questjs
+        -else:
+            -> questink
+        }
     +   {contprompts(3) == 1} &nbsp;{curprompt3}
         ~curquest = 3
-        -> quest
+        {questtype3 == "js":
+            -> questjs
+        -else:
+            -> questink
+        }
     +   [Leave.]{~You've had enough of {curlocationname}, for the time being.|Time to get going - you've got something better to do (hopefully).|{curlocationname}'s boring - time to go!}
         -> map
 -> DONE
 
-=== quest ===
+=== questink ===
+~ temp questname = getinkquest(curquest)
+{questname == "dmerchant":
+    -> quest_dmerchant
+- else:
+    -> DONE
+}
+=== questjs ===
 &nbsp;{nextprompt(curquest,1)}
     + &nbsp;{nextprompt(curquest,0.5)}&nbsp;
         {contprompts(curquest) == 1:
-            -> quest
+            -> questjs
         }
         -> city
 
@@ -139,3 +164,28 @@ Before you lies the dungeon called {curlocationname}.  Do you wish to enter?
         -> village
 
 -> END
+
+=== quest_dmerchant ===
+{curqueststart == "start":
+    'Damned devious demons! Discamping with my dear Dazzeling Diamond Decanter!' he shouts, to noone in particular.
+        +   Your what?
+    You sense something's off about merchant.  He turns to you, eyes bulging. 'And my Downscaled Dogwood Doorjamb! Drat!'
+        +   Are you...feeling alright?
+    'And even my Durable Duralumin Dumbell!  Displaced!  Disappeared!'
+        +   Let me guess - I'm supposed to help?
+    A grin spreads across the merchant's face. 'Definitely!  I'd be decidedly delighted!'
+        +   Great.
+            ~takeinkquest(curquest)
+            -> city
+}
+{curqueststart == "middle":
+    'Did you discover my Durable Duralumin Dumbell, Downscaled Dogwood Doorjamb, and Dazzeling Diamond Decanter?'
+        +   No, sorry, not yet.
+    'Darn!' The merchant throws his arms into the air and stalks away in a huff.
+        -> city
+}
+{curqueststart == "end":
+    'yay'
+    +   Great
+        ->city
+}

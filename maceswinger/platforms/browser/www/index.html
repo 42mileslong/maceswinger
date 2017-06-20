@@ -175,6 +175,18 @@
       story.BindExternalFunction("bossfight", function(way) {gamemap.curfeature().bosslevel = way});
       story.BindExternalFunction("nextprompt", function(quest,much) {return gamemap.curfeature().quests[quest-1].nextprompt(true,much);});
       story.BindExternalFunction("contprompts", function(quest) {return gamemap.curfeature().quests[quest-1].contprompts();});
+      story.BindExternalFunction("getinkquest", function(which) {
+        if (gamemap.curfeature().quests[quest-1].stage == 0)
+          story.variablesState["curqueststart"] = "start";
+        else if (gamemap.curfeature().quests[quest-1].stage == gamemap.curfeature().quests[quest-1].stages.length-1) {
+          story.variablesState["curqueststart"] = "end";
+        }
+        else {
+          story.variablesState["curqueststart"] = "middle";
+        }
+        return gamemap.curfeature().quests[quest-1].questpattern;
+      });
+      story.BindExternalFunction("takeinkquest", function(quest) {gamemap.curfeature().quests[quest-1].take();});
       var storyContainer = document.querySelectorAll('#story')[0];
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";

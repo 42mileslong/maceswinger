@@ -84,6 +84,9 @@ class Map {
       story.variablesState["curprompt1"] = curlocation.quests[0].nextprompt(false);
       story.variablesState["curprompt2"] = curlocation.quests[1].nextprompt(false);
       story.variablesState["curprompt3"] = curlocation.quests[2].nextprompt(false);
+      story.variablesState["questtype1"] = curlocation.quests[0].type;
+      story.variablesState["questtype2"] = curlocation.quests[1].type;
+      story.variablesState["questtype3"] = curlocation.quests[2].type;
     }
     this.curlvl = curlocation.lv;
   }

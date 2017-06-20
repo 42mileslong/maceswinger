@@ -26,6 +26,7 @@ class Quest {
     this.questpattern = randlist(quest_patterns[0]);//this.diff.num]);
     this.recentlytaken = false;
     if (this.questpattern == "closefetch") {
+      this.type = "js"
       this.giver = {
         fname: randlist(names_first),
         lname: randlist(names_last)
@@ -43,15 +44,12 @@ class Quest {
       this.stages = [[tempdun,"Delve into the nearby dungeon of " + tempdun.name + " in search of " + this.item[0].sdesc + "."],[tempcity,"Return with " + this.item[0].sdesc + " to " + tempcity.name + "."]];
       this.start = ["Investigate the soft whimpering emitting from a nearby alleyway.","You see a despondant man crying silently in the back of the alley, rocking back and forth in the fetal position.  Which is kinda disgusting, considering the refuse blanketing the ground.","Make uncomfortable eye contact.","The man stares back. 'Help!' he cries, somewhat awkwardly.", randlist(help)+"","'Well, I guess,' the man sniffles.  His nose is running profusely. 'You see, I...lost an important family heirloom while courousing last night in the countryside.'", randlist(and)+"","'It's my treasured " + this.item[0].name + " - my " + randlist(relatives) + "'s going to be very upset!'","Fine, I'll help.","'You will?  Great! I'm pretty sure it (somehow) ended up inside " + tempdun.name + ".  You could try looking there.  By the way, I'm " + this.giver.fname + ". Now get going!'","Leave " + this.giver.fname + "."];
       this.end = [["Talk to " + this.giver.fname + ".","'You're back? Already? Wait - you don't have my " + this.item[0].name + " yet, don't you.  Don't come back until you do.",randlist(affirmative)+""],["Talk to " + this.giver.fname + ".", "'Wow, you found it?  Great!'","Yes, great.", "'You're probably expecting some sort of reward, aren't you?'",randlist(affirmative)+"","'Well, here you go then.  See you around!'","Do me a favor and hold onto that " + this.item[0].name + "."]];
-      this.curprompt = this.start;
-      this.curpromptindex = 0;
-      this.type = "js"
     }
     else if (this.questpattern == "dmerchent") {
       this.type = "ink";
       this.item = [
         new Item("temp","Alliterative Merchant","Dazzeling Diamond Decanter",[this.questindex,0],this),
-        new Item("temp","Alliterative Merchant","Downscale Dogwood Doorjamb",[this.questindex,1],this),
+        new Item("temp","Alliterative Merchant","Downscaled Dogwood Doorjamb",[this.questindex,1],this),
         new Item("temp","Alliterative Merchant","Durable Duralumin Dumbell",[this.questindex,2],this)
       ];
       this.reward = {
@@ -60,8 +58,12 @@ class Quest {
       }
       var duns = gamemap.returnclostest("dungeon");
       var city = gamemap.returnclostest("city")[0][1];
-      //work in progress
+      this.stages = [[duns,"Explore the nearby dungeons of " + duns[0][1].name + ", " + duns[1][1].name + " and " + duns[2][1].name + " to recover the Dazzeling Diamond Decanter, the Downscaled Dogwood Doorjamb, and the Durable Duralumin Dumbell."],[city,"Return to the city of " + city.name + " to return the Dazzeling Diamond Decanter, the Downscaled Dogwood Doorjamb, and the Durable Duralumin Dumbell."]];
+      this.start = ["Approach a distressed merchant."]
+      this.end = [["Discuss your ongoing quest with the alliterative merchant."],["Present the alliterative merchant his prized possessions."]]
     }
+    this.curprompt = this.start;
+    this.curpromptindex = 0;
   }
   take() {
     p.stats.quests_taken++;
@@ -70,7 +72,14 @@ class Quest {
     this.curprompt = this.end[0];
     this.curpromptindex = 0;
     this.stage = 0;
-    this.stages[0][0].addbossloot(this.item[0]);
+    if (this.questpattern == "closefetch") {
+      this.stages[0][0].addbossloot(this.item[0]);
+    }
+    else if (this.questpattern == "dmerchant") {
+      this.stages[0][0][0][1].addbossloot(this.item[0]);
+      this.stages[0][0][1][1].addbossloot(this.item[1]);
+      this.stages[0][0][2][1].addbossloot(this.item[2]);
+    }
     this.parid = "quest"+p.stats.quests_taken;
     addelement(document.getElementById("questpage"),"div","card",this.parid);
     addelement(document.getElementById(this.parid),"div","card-header",this.parid + "head",this.name);
