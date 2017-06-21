@@ -12,6 +12,7 @@ class player {
     this.lv = 1;
     this.inv = [];
     this.questinv = [];
+    this.activequests = [];
     this.invsize = 2;
     this.invfull = false;
     var we = new Weapon(0,"handz");

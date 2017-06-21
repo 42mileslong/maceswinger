@@ -28,6 +28,7 @@ EXTERNAL contprompts(quest)
 EXTERNAL refreshlines()
 EXTERNAL getinkquest(which)
 EXTERNAL takeinkquest(which)
+EXTERNAL endquest(which)
 
 -> init
 === init ===
@@ -46,20 +47,20 @@ EXTERNAL takeinkquest(which)
         -> exitdungeon
     +   {current_lvl != 0} [Walk towards the light.]
         ~ current_lvl--
-        { RANDOM(0, 20) > 15:
+        { RANDOM(0, 20) > 115:
             ~ fight("easy")
             -> DONE
         }
         -> move
     +   {current_lvl < 10} [Walk deeper.]
         ~ current_lvl++
-        { RANDOM(0, 20) > 5:
+        { RANDOM(0, 20) > 25:
             ~ fight("normal")
             -> DONE
         }
         -> move
         -> move
-    +   {current_lvl == 10} What's that?
+    +   {current_lvl == 1} What's that?
         -> boss
 
 === after ===
@@ -167,25 +168,58 @@ Before you lies the dungeon called {curlocationname}.  Do you wish to enter?
 
 === quest_dmerchant ===
 {curqueststart == "start":
-    'Damned devious demons! Discamping with my dear Dazzeling Diamond Decanter!' he shouts, to noone in particular.
-        +   Your what?
-    You sense something's off about merchant.  He turns to you, eyes bulging. 'And my Downscaled Dogwood Doorjamb! Drat!'
-        +   Are you...feeling alright?
-    'And even my Durable Duralumin Dumbell!  Displaced!  Disappeared!'
-        +   Let me guess - I'm supposed to help?
-    A grin spreads across the merchant's face. 'Definitely!  I'd be decidedly delighted!'
-        +   Great.
-            ~takeinkquest(curquest)
-            -> city
+    ->quest_dmerchant_start
 }
 {curqueststart == "middle":
-    'Did you discover my Durable Duralumin Dumbell, Downscaled Dogwood Doorjamb, and Dazzeling Diamond Decanter?'
-        +   No, sorry, not yet.
-    'Darn!' The merchant throws his arms into the air and stalks away in a huff.
-        -> city
+    ->quest_dmerchant_middle
 }
 {curqueststart == "end":
-    'yay'
-    +   Great
-        ->city
+    ~temp curname = "gold"
+    ->quest_dmerchant_end
 }
+= quest_dmerchant_start
+-   'Damned devious demons! Discamping with my dear Dazzeling Diamond Decanter!' he shouts, to noone in particular.
+    +   Your what?
+-   You sense something's off about merchant.  He turns to you, eyes bulging. 'And my Downscaled Dogwood Doorjamb! Drat!'
+    +   Are you...feeling alright?
+-   'And even my Durable Duralumin Dumbell!  Displaced!  Disappeared!' Yep, something's definitely off.
+    +   Let me guess - I'm supposed to help?
+    +   Uh, good luck finding your...Downmailed, uh, Diawood Doorcanter.  I'll just leave you be.
+        As you cautiously back away, the merchant begins assailing other passerby.  Whew.
+        -> city
+-   A grin spreads across the merchant's face. 'Definitely!  I'd be decidedly delighted!'
+    +   Great.
+        ~takeinkquest(curquest)
+        -> city
+        
+= quest_dmerchant_middle
+-   'Did you discover my Durable Duralumin Dumbell, Downscaled Dogwood Doorjamb, and Dazzeling Diamond Decanter?'
+    +   No, sorry, not yet.
+-   'Darn!' The merchant throws his arms into the air and stalks away in a huff.
+    -> city
+    
+= quest_dmerchant_end
+The merchant's eyes widen in disbelief.  'You've disinterred my Durable Duralumin Dumbell, my Downscaled Dogwood Doorjamb, AND my Dazzeling Diamond Decanter?! Delightful!'
+    +   Yup.
+-   'Your due dividend...doubloons!' The merchant hands you a bag brimming with coins (and you somehow feel a bit more experienced).
+    +   Thanks for the gold.
+        -> quest_dmerchant_goldloop
+    +   Thanks for the...doubloons.
+        -> quest_dmerchant_endquest
+        
+= quest_dmerchant_goldloop
+The merchant angerly glares at you. 'Not {curname}, DOUBLOONS!!!'
+    *   Actually, these are gold coins.
+        ~curname = "coins"
+        -> quest_dmerchant_goldloop
+    *   {curname == "coins"}Look, you can't just call currency whatever you what.  What if I decided to call them, say, Canadian Pesos?
+        ~curname = "Canadian Pesos"
+        -> quest_dmerchant_goldloop
+    +   Ok, ok. Doubloons.
+        -> quest_dmerchant_endquest
+
+= quest_dmerchant_endquest
+The merchant nods silently (thankfully), then wanders off.  You've had enough alliteration for one day.
+    ~endquest(curquest)
+    ->city
+

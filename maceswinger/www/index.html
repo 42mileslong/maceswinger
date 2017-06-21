@@ -133,7 +133,7 @@
                     </div>
                     <div class="content-block" id="fight">
                         <canvas id="screen" style="margin:auto;display:block"></canvas>
-                        <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Hit</a>
+                        <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Swing</a>
                         <p><span data-progress="0" style="width:50%;margin:auto"class="progressbar" id="expbar"></span>
                         <div class="chip" style="">
                           <div class="chip-label" id="plv" style="width:0%;margin:auto">1</div>
@@ -175,8 +175,8 @@
       story.BindExternalFunction("bossfight", function(way) {gamemap.curfeature().bosslevel = way});
       story.BindExternalFunction("nextprompt", function(quest,much) {return gamemap.curfeature().quests[quest-1].nextprompt(true,much);});
       story.BindExternalFunction("contprompts", function(quest) {return gamemap.curfeature().quests[quest-1].contprompts();});
-      story.BindExternalFunction("getinkquest", function(which) {
-        if (gamemap.curfeature().quests[quest-1].stage == 0)
+      story.BindExternalFunction("getinkquest", function(quest) {
+        if (gamemap.curfeature().quests[quest-1].stage == -1)
           story.variablesState["curqueststart"] = "start";
         else if (gamemap.curfeature().quests[quest-1].stage == gamemap.curfeature().quests[quest-1].stages.length-1) {
           story.variablesState["curqueststart"] = "end";
@@ -187,6 +187,7 @@
         return gamemap.curfeature().quests[quest-1].questpattern;
       });
       story.BindExternalFunction("takeinkquest", function(quest) {gamemap.curfeature().quests[quest-1].take();});
+      story.BindExternalFunction("endquest", function(quest) {gamemap.curfeature().quests[quest-1].endquest();});
       var storyContainer = document.querySelectorAll('#story')[0];
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";
