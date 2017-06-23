@@ -43,7 +43,9 @@ class player {
       var dam = this.weap.getdam();
       en.health -= dam;
       en.damnums.push(new Damnum(dam));
-      en.update();
+      if (this.weap.status.induces) {
+        en.setstatus(this.weap.status.type,this.weap.status.duration,this.weap.status.damduration,this.weap.status.damage,true);
+      }
     }
   }
   drop(id) {

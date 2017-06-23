@@ -22,6 +22,7 @@ function gameloop() {
     }
     ctx.globalAlpha = 1;
     //ctx.fillText(curen.health,size.w*.75/2,40);
+    curen.update();
     if (!curen.alive) {
       p.expup(curen.exp);
       var items = [new Weapon(curen.lv)];

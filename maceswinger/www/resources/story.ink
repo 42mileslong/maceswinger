@@ -3,6 +3,8 @@ VAR fightout = -> move
 
 VAR deepest_lvl = 10
 VAR current_lvl = 1
+VAR down_chance = 15
+VAR up_chance = 5
 
 VAR ablenorth = false
 VAR ablesouth = false
@@ -47,20 +49,20 @@ EXTERNAL endquest(which)
         -> exitdungeon
     +   {current_lvl != 0} [Walk towards the light.]
         ~ current_lvl--
-        { RANDOM(0, 20) > 115:
+        { RANDOM(0, 20) > down_chance:
             ~ fight("easy")
             -> DONE
         }
         -> move
     +   {current_lvl < 10} [Walk deeper.]
         ~ current_lvl++
-        { RANDOM(0, 20) > 25:
+        { RANDOM(0, 20) > up_chance:
             ~ fight("normal")
             -> DONE
         }
         -> move
         -> move
-    +   {current_lvl == 1} What's that?
+    +   {current_lvl == deepest_lvl} What's that?
         -> boss
 
 === after ===
