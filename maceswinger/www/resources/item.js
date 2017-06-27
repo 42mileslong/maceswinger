@@ -1,8 +1,11 @@
 var materials = ["Wooden", "Stone", "Bone", "Copper", "Lead", "Iron", "Brass", "Silver", "Bronze", "Steel", "Golden", "Obsidian", "Diamond"];
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
-var craft = [["",0],["Pointy ",1],["Broken ",-2],["Rusty ",-1],["Chipped ",-1]];
-var magic = ["Bleeding"]
-var magicmods = [["",0,0],["Vigorous ",2,0],["Enduring ",0,2],["Ephemeral ",0,-2],["Lethargic ",-2,0],["Apathetic ",-1,-1],["Brisk ",1,1]];//first number modifies damage, second modifies duration
+var craft = [["",0],["Pointy ",0.1],["Broken ",-0.2],["Rusty ",-0.1],["Chipped ",-0.1]];
+var magic = ["Bleeding", "Swinging"]
+var magicmods = [
+  [["Mundane ",0,0],["Vigorous ",0.2,0],["Enduring ",0,0.2],["Ephemeral ",0,-0.2],["Lethargic ",-0.2,0],["Minor ",-0.1,-0.1],["Major ",0.1,0.1]],//first number modifies damage, second modifies duration
+  [["Mundane ",0],["Labored ",0.2],["Clumsy ",0.15],["Awkward ",0.1],["Annoying ",0.05],["Minor ",-0.05],["Rapid ",-0.1],["Heightened ",-0.1],["Major ",-0.15],["Extreme ",-0.2]]
+];
 class Item {
   constructor(desc,whose,name,id="",quest = null) {
     this.element = null;
@@ -82,35 +85,46 @@ class Weapon extends Item {
       induces: false,
       name: "",
       typenum: 0,
+      swingmod: 0,
+      dammod: 0,
     }
     if (name == "handz") {
       this.name = "handz"
-      this.swing = .1;
+      this.swing = this.baseswing = .1;
       this.lv = 200;
       this.craft = 0;
     }
     else {
       this.type = randint(0,types.length-1);
-      this.swing = types[this.type][1];
+      this.swing = this.baseswing = types[this.type][1];
       this.craft = randint(0,craft.length-1);
       if (randint(0,3) < 10) {
         var typenum = randint(0,magic.length-1)
         var type = magic[typenum];
-        var mod = randlist(magicmods);
-        this.status = {
-          induces: true,
-          name: " of " + mod[0] + type,
-          damage: ((this.lv*2 + 4 + (this.lv+1)/4*mod[1])/15).toFixed(2),
-          duration: (360 + 60*mod[2]).toFixed(0),
-          damduration: 45 + 5*mod[2],
-          type: type,
-          typenum: typenum+1,
-          alpha: .75 + .125*(mod[1]+mod[2]),
+        var mod = randlist(magicmods[typenum]);
+        if (type == "Bleeding") {
+          this.status = {
+            induces: true,
+            name: " of " + mod[0] + type,
+            damage: ((this.lv*2 + 4)*(craft[this.craft][1]+1)*(mod[1]+1)/15).toFixed(2),
+            duration: (360*(1+mod[2])).toFixed(0),
+            damduration: 45*(1+mod[2]),
+            type: type,
+            typenum: typenum+1,
+            alpha: .75 + .125*(mod[1]+mod[2]),
+            dammod: 0,
+            swingmod: 0,
+          }
+        }
+        else if (type == "Swinging") {
+          this.status.name = " of " + mod[0] + type;
+          this.status.typenum = typenum+1;
+          this.swing = (this.swing*(mod[1]+1)).toFixed(2);
         }
       }
       this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0] + this.status.name;
     }
-    this.dam = ((this.lv*2 + 4 + (this.lv+1)/4*craft[this.craft][1])*(Math.pow(this.swing,1.075))).toFixed(2);
+    this.dam = ((this.lv*2 + 4)*(craft[this.craft][1]+1)*(this.status.dammod+1)*Math.pow(this.baseswing,1.075)).toFixed(2);
     this.damps = (this.dam/this.swing).toFixed(2);
     this.img = new Image(64,128);
     ctxchange.drawImage(weapsimg, this.lv * 16,8 + this.type*32,16,32,0,0,64,128); //base weapon image
