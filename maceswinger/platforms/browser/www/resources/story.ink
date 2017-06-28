@@ -140,6 +140,11 @@ Before you lies the dungeon called {curlocationname}.  Do you wish to enter?
         -> move
     +   No![] I'm boring, lazy, and a coward - I'm outta here!
         -> map
+
+=== dead ===
+You have been vanquised by a mighty {curenname}.  RIP.
+    ->END
+
 === map ===
 ~displaymap()
 {~You can almost see your house from here!|The map crinkles as you contemplate your next move.|'Where should I go venture next?' You think to yourself.|Squinting furiously (to no avail), you once again berate yourself for not springing for a larger map.}  You decide to travel...

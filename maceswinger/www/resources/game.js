@@ -8,11 +8,17 @@ function gameloop() {
     curen.slider.cur = Math.sin(curen.slider.step)*50+50
     var width = Math.floor(Math.min(size.w*.75,(size.h-410)*11/23));
     var height = Math.floor(Math.min(size.h-410,size.w*23/11*.75));
-    ctx.drawImage(healthbar,0,0,(Math.ceil(curen.health/curen.healthmax*21)),2,Math.floor((size.w*.75-width/11*21)/2),0,Math.floor(width/11*curen.health/curen.healthmax*21),Math.floor(height/23*2));
-    ctx.drawImage(enemiesimg,curen.type[1]*11,0,11,23,Math.floor((size.w*.75-width)/2),0,width,height);
-    ctx.drawImage(slider,0,0,21,1,Math.floor((size.w*.75-width/11*21)/2),Math.floor(20*height/23),Math.floor(width/11*21),Math.floor(height/23));
-    ctx.drawImage(slider,0,1,Math.round(curen.type[2]/100*21),1,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.range[0]/100*21*width/11), Math.floor(20*height/23), Math.floor(width/11*curen.type[2]/100*21), Math.floor(height/23));
-    ctx.drawImage(slider,0,2,3,6,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.cur/100*21*width/11-3*width/22),Math.floor(18*height/23),Math.floor(width/11*3),Math.floor(height/23*6));
+
+    //drawing enemy screen (yes this is a YUGE mess, I'm really sorry)
+    ctx.drawImage(healthbar,0,0,(Math.ceil(curen.health/curen.healthmax*21)),2,Math.floor((size.w*.75-width/11*21)/2),0,Math.floor(width/11*curen.health/curen.healthmax*21),Math.floor(height/23*2));//enemy health
+    ctx.drawImage(enemiesimg,curen.type[1]*11,0,11,23,Math.floor((size.w*.75-width)/2),0,width,height);//enemy sprite
+    ctx.drawImage(slider,0,0,21,1,Math.floor((size.w*.75-width/11*21)/2),Math.floor(20*height/23),Math.floor(width/11*21),Math.floor(height/23));//slider green bar
+    ctx.drawImage(slider,0,1,Math.round(curen.type[2]/100*21),1,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.range[0]/100*21*width/11), Math.floor(20*height/23), Math.floor(width/11*curen.type[2]/100*21), Math.floor(height/23)); //slider red health bar
+    if (curen.atk.atking) {
+      ctx.drawImage(slider,0,7,Math.round(curen.atk.cur_slider_range/100*21),1,Math.floor((size.w*.75-width/11*21)/2 + curen.atk.rangenums[0]/100*21*width/11), Math.floor(20*height/23), Math.floor(width/11*curen.atk.cur_slider_range/100*21), Math.floor(height/23)); //slider yellow hit bar
+    }
+    ctx.drawImage(slider,0,2,3,6,Math.floor((size.w*.75-width/11*21)/2 + curen.slider.cur/100*21*width/11-3*width/22),Math.floor(18*height/23),Math.floor(width/11*3),Math.floor(height/23*6));//slider pointer
+    //update floaty damage numbers
     for (var i = 0; i < curen.damnums.length; i++) {
       if (!curen.damnums[i].dead) {
         curen.damnums[i].update();
@@ -23,6 +29,7 @@ function gameloop() {
     ctx.globalAlpha = 1;
     //ctx.fillText(curen.health,size.w*.75/2,40);
     curen.update();
+    //post-fight stuffz (loot, exp)
     if (!curen.alive) {
       p.expup(curen.exp);
       var items = [new Weapon(curen.lv)];

@@ -2,8 +2,8 @@ class player {
   constructor() {
     this.name = "";
     this.gold = 0;
-    this.health = 0;
-    this.accuracy = 1;
+    this.health = 10;
+    this.accuracy = 1.3; //lower = better
     this.exp = {
       cur: 0,
       next: 100,
@@ -39,13 +39,22 @@ class player {
     this.refreshinv();
   }
   hit(en) {
-    if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
+    if (en.atk.atking && en.atk.rangenums[0] <= en.slider.cur && en.atk.rangenums[1] >= en.slider.cur) {
+      en.attackfinished();
+    }
+    else if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
       var dam = this.weap.getdam();
       en.health -= dam;
       en.damnums.push(new Damnum(dam));
       if (this.weap.status.induces) {
         en.setstatus(this.weap.status.type,this.weap.status.duration,this.weap.status.damduration,this.weap.status.damage,true);
       }
+    }
+  }
+  dealhit(dam) {
+    this.health -= dam;
+    if (this.health <= 0) {
+      this.setstate("story");
     }
   }
   drop(id) {
@@ -103,7 +112,12 @@ class player {
     }
     else if (state == "story") {
       togglescreen("story");
-      story.ChoosePathString("after");
+      if (p.health > 0) {
+        story.ChoosePathString("after");
+      }
+      else {
+        story.ChoosePathString("dead");
+      }
     }
   }
   expup(exp) {

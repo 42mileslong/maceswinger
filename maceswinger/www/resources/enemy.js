@@ -1,3 +1,4 @@
+//name, picture index, health bar size (out of 100)
 var entypes = [
   [["Knight",2,30],["Afroman?",4,50],["Meerkat",8,20]],//above normal
   [["Bat",3,10],["Rat",6,20]],//below normal
@@ -26,6 +27,20 @@ class enemy {
       max_dam_duration: 0,
       damage: 0,
     }
+    this.atk = {
+      timer_max: 180,
+      timer_cur: 0,
+      atk_dur: 180, //max
+      atk_cur: 180,
+      max_slider_range: 30,
+      cur_slider_range: 30,
+      rangenums: null,
+      center: 50, //where yellow hit bar is placed on slider
+      atking: false,
+      damage: lv*2 + 4,
+    }
+
+    //select enemy 'type' based on current player area (above normal, below normal, above magical, below magical)
     if (area == "an") {
       this.type = randlist(entypes[0]);
     }
@@ -38,6 +53,7 @@ class enemy {
     else if (area == 'bm') {
       this.type = randlist(entypes[3]);
     }
+
     this.name = this.type[0];
     this.slider.range = [Math.floor(this.slider.max/2 - this.type[2]/2),Math.floor(this.slider.max/2 + this.type[2]/2)];
     this.damnums = [];
@@ -55,11 +71,34 @@ class enemy {
         this.setstatus("none",0,0,0);
       }
     }
+    if (!this.atk.atking && this.atk.timer_cur > this.atk.timer_max) {
+      this.atk.atking = true;
+      this.atk.timer_cur = 0;
+      this.atk.center = randint(Math.round(this.atk.max_slider_range/2),100-Math.round(this.atk.max_slider_range/2));
+      this.atk.rangenums = [this.atk.center - this.atk.max_slider_range/2,this.atk.center + this.atk.max_slider_range/2];
+    }
+    else if (!this.atk.atking) {
+      this.atk.timer_cur++;
+    }
+    else if (this.atk.atking && this.atk.atk_cur > 0) {
+      this.atk.atk_cur--;
+      this.atk.cur_slider_range = (this.atk.atk_cur/this.atk.atk_dur)*this.atk.max_slider_range;
+      this.atk.rangenums = [this.atk.center - this.atk.cur_slider_range/2,this.atk.center + this.atk.cur_slider_range/2];
+    }
+    else {
+      this.attackfinished();
+      p.dealhit(this.atk.damage);
+    }
     if (this.health <= 0) {
       this.kill();
       p.stats.enemies_killed++;
       p.updatestats();
     }
+  }
+  attackfinished() {
+    this.atk.atking = false;
+    this.atk.cur_slider_range = this.atk.max_slider_range;
+    this.atk.atk_cur = this.atk.atk_dur;
   }
   setstatus(name,duration,maxdamdur,dam,active = false) {
     this.status = {
