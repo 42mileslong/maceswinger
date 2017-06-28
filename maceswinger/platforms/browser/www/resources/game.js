@@ -269,27 +269,32 @@ function togglescreen(way) {
 }
 class Damnum {
   constructor(amount) {
-    var stringint = amount+""
-    while (stringint[stringint.length-1] == "0" || stringint[stringint.length-1] == ".") {
-      stringint = stringint.substring(0, stringint.length - 1);
-    }
-    ctxmapchange.clearRect(0,0,mapchange.width,mapchange.height)
-    var offset = 0;
-    for (var i = 0; i < stringint.length; i++) {
-      if (stringint[i] != ".") {
-        ctxmapchange.drawImage(damnums,parseInt(stringint[i])*5,0,5,5,i*5-offset,0,5,5);
-      }
-      else {
-        offset = 2
-        ctxmapchange.drawImage(damnums,0,1,2,2,i*5+1,3,2,2)
-      }
-    }
     this.img = new Image();
+    ctxmapchange.clearRect(0,0,mapchange.width,mapchange.height)
+    if (amount == "Blocked!") {
+      ctxmapchange.drawImage(damnums,0,5,39,5,0,0,39,5)
+    }
+    else {
+      var stringint = amount+""
+      while (stringint[stringint.length-1] == "0" || stringint[stringint.length-1] == ".") {
+        stringint = stringint.substring(0, stringint.length - 1);
+      }
+      var offset = 0;
+      for (var i = 0; i < stringint.length; i++) {
+        if (stringint[i] != ".") {
+          ctxmapchange.drawImage(damnums,parseInt(stringint[i])*5,0,5,5,i*5-offset,0,5,5);
+        }
+        else {
+          offset = 2
+          ctxmapchange.drawImage(damnums,0,1,2,2,i*5+1,3,2,2)
+        }
+      }
+    }
     this.img.src = mapchange.toDataURL();
     this.curalpha = 1
     this.dead = false;
     this.coords = {
-      x: randint(0,6),
+      x: randint(0,12),
       y: randint(2,18)
     }
   }

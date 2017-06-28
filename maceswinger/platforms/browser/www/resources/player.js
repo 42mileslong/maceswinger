@@ -2,7 +2,10 @@ class player {
   constructor() {
     this.name = "";
     this.gold = 0;
-    this.health = 10;
+    this.health = {
+        max: 20,
+        cur: 20,
+    }
     this.accuracy = 1.3; //lower = better
     this.exp = {
       cur: 0,
@@ -40,6 +43,7 @@ class player {
   }
   hit(en) {
     if (en.atk.atking && en.atk.rangenums[0] <= en.slider.cur && en.atk.rangenums[1] >= en.slider.cur) {
+      en.damnums.push(new Damnum("Blocked!"));
       en.attackfinished();
     }
     else if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
@@ -52,8 +56,9 @@ class player {
     }
   }
   dealhit(dam) {
-    this.health -= dam;
-    if (this.health <= 0) {
+    this.health.cur -= dam;
+    myApp.setProgressbar(document.getElementById("healthbar"), this.health.cur/this.health.max*100, 1000);
+    if (this.health.cur <= 0) {
       this.setstate("story");
     }
   }
@@ -112,7 +117,7 @@ class player {
     }
     else if (state == "story") {
       togglescreen("story");
-      if (p.health > 0) {
+      if (p.health.cur > 0) {
         story.ChoosePathString("after");
       }
       else {
@@ -127,6 +132,8 @@ class player {
       document.getElementById("plv").innerHTML = this.lv;
       this.exp.last = this.exp.next;
       this.exp.next += this.exp.next*1.1;
+      this.health.max += 2;
+      this.health.cur = this.health.max;
     }
     myApp.setProgressbar(document.getElementById("expbar"), (this.exp.cur - this.exp.last) / (this.exp.next - this.exp.last)*100, 1000);
   }

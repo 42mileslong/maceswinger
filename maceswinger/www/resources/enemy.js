@@ -28,9 +28,9 @@ class enemy {
       damage: 0,
     }
     this.atk = {
-      timer_max: 180,
+      timer_max: 60 + (Math.max(0,120-lv*10)),
       timer_cur: 0,
-      atk_dur: 180, //max
+      atk_dur: 60 + (Math.max(0,120-lv*10)), //max
       atk_cur: 180,
       max_slider_range: 30,
       cur_slider_range: 30,

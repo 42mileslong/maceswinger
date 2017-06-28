@@ -54,6 +54,7 @@ class Map {
         });
       }
     }
+    setTimeout(scrollQuickToBottom,10);
   }
   addfeatures(type, howmany) {
     for (var i = 0; i < howmany; i++) {
