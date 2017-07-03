@@ -23,7 +23,7 @@ function gameloop() {
       if (!curen.damnums[i].dead) {
         curen.damnums[i].update();
         ctx.globalAlpha = curen.damnums[i].curalpha;
-        ctx.drawImage(curen.damnums[i].img,Math.floor((size.w*.75-width/11*21)/2+width/11*curen.damnums[i].coords.x),Math.floor(curen.damnums[i].coords.y*height/23),Math.floor(width/11*125),Math.floor(height/5*25));
+        ctx.drawImage(curen.damnums[i].img,Math.floor((size.w*.75-width/11*21)/2+width/11*curen.damnums[i].coords.x),Math.floor(curen.damnums[i].coords.y*height/23),Math.floor(width/11*125),Math.floor(height/5*25));//draw floaty damage number
       }
     }
     ctx.globalAlpha = 1;
@@ -32,12 +32,13 @@ function gameloop() {
     //post-fight stuffz (loot, exp)
     if (!curen.alive) {
       p.expup(curen.exp);
-      var items = [new Weapon(curen.lv)];
+      var items = [];
       if (gamemap.curfeature().bosslevel) {
         for (var i in gamemap.curfeature().bossloot) {
           items.push(gamemap.curfeature().bossloot[i]);
         }
       }
+      items.push(new Weapon(curen.lv));
       prompt(items,0);
       if (gamemap.curfeature().bosslevel) {
         gamemap.curfeature().bossloot = [];
@@ -268,13 +269,20 @@ function togglescreen(way) {
   }
 }
 class Damnum {
-  constructor(amount) {
+  constructor(amount,damcolor = "red") {
     this.img = new Image();
-    ctxmapchange.clearRect(0,0,mapchange.width,mapchange.height)
+    ctxmapchange.clearRect(0,0,mapchange.width,mapchange.height);
     if (amount == "Blocked!") {
-      ctxmapchange.drawImage(damnums,0,5,39,5,0,0,39,5)
+      ctxmapchange.drawImage(damnums,0,5,39,5,0,0,39,5);
+    }
+    else if (amount == "Paralyzed!") {
+      ctxmapchange.drawImage(damnums,0,15,51,5,0,0,51,5);
     }
     else {
+      var color = 0;
+      if (damcolor == "blue") {
+        color = 10;
+      }
       var stringint = amount+""
       while (stringint[stringint.length-1] == "0" || stringint[stringint.length-1] == ".") {
         stringint = stringint.substring(0, stringint.length - 1);
@@ -282,11 +290,11 @@ class Damnum {
       var offset = 0;
       for (var i = 0; i < stringint.length; i++) {
         if (stringint[i] != ".") {
-          ctxmapchange.drawImage(damnums,parseInt(stringint[i])*5,0,5,5,i*5-offset,0,5,5);
+          ctxmapchange.drawImage(damnums,parseInt(stringint[i])*5,color,5,5,i*5-offset,0,5,5);
         }
         else {
-          offset = 2
-          ctxmapchange.drawImage(damnums,0,1,2,2,i*5+1,3,2,2)
+          offset = 2;
+          ctxmapchange.drawImage(damnums,0,1+color,2,2,i*5+1,3,2,2);
         }
       }
     }

@@ -49,9 +49,14 @@ class player {
     else if (en.slider.range[0] <= en.slider.cur && en.slider.range[1] >= en.slider.cur) {
       var dam = this.weap.getdam();
       en.health -= dam;
-      en.damnums.push(new Damnum(dam));
-      if (this.weap.status.induces) {
-        en.setstatus(this.weap.status.type,this.weap.status.duration,this.weap.status.damduration,this.weap.status.damage,true);
+      en.damnums.push(new Damnum(dam,this.weap.status.damcolor));
+      if (this.weap.status.induces && randint(0,1) == 1) {//50% chance magic weapon inflicts its status effect
+        en.setstatus(this.weap.status.type,this.weap.status.duration,this.weap.status.damduration,this.weap.status.damage,this.weap.status.damcolor,true);
+        if (this.weap.status.type == "Lightning") {
+          en.damnums.push(new Damnum("Paralyzed!"));
+          en.paralyzed = true;
+          en.attackfinished();
+        }
       }
     }
   }

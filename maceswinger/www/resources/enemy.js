@@ -19,6 +19,7 @@ class enemy {
     this.exp = this.lv * 1.1 + 10;
     this.health = this.healthmax = 15 + this.lv * 2;
     this.alive = true;
+    this.paralyzed = false;
     this.status = {
       name: "none",
       duration: 0,
@@ -26,6 +27,7 @@ class enemy {
       cur_dam_duration: 0,
       max_dam_duration: 0,
       damage: 0,
+      color: "red",
     }
     this.atk = {
       timer_max: 60 + (Math.max(0,120-lv*10)),
@@ -65,13 +67,13 @@ class enemy {
       if (this.status.cur_dam_duration > this.status.max_dam_duration) {
         this.status.cur_dam_duration = 0;
         this.health -= this.status.damage;
-        this.damnums.push(new Damnum(this.status.damage));
+        this.damnums.push(new Damnum(this.status.damage,this.status.color));
       }
       if (this.status.duration <= 0) {
         this.setstatus("none",0,0,0);
       }
     }
-    if (!this.atk.atking && this.atk.timer_cur > this.atk.timer_max) {
+    if (!this.atk.atking && this.atk.timer_cur > this.atk.timer_max && !this.paralyzed) {
       this.atk.atking = true;
       this.atk.timer_cur = 0;
       this.atk.center = randint(Math.round(this.atk.max_slider_range/2),100-Math.round(this.atk.max_slider_range/2));
@@ -100,7 +102,7 @@ class enemy {
     this.atk.cur_slider_range = this.atk.max_slider_range;
     this.atk.atk_cur = this.atk.atk_dur;
   }
-  setstatus(name,duration,maxdamdur,dam,active = false) {
+  setstatus(name,duration,maxdamdur,dam,color = "red",active = false) {
     this.status = {
       name: name,
       duration: duration,
@@ -108,6 +110,10 @@ class enemy {
       cur_dam_duration: 0,
       max_dam_duration: maxdamdur,
       damage: dam,
+      color: color,
+    }
+    if (name == "none") {
+      this.paralyzed = false;
     }
   }
   kill() {

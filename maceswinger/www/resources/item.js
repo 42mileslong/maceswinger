@@ -1,10 +1,11 @@
 var materials = ["Wooden", "Stone", "Bone", "Copper", "Lead", "Iron", "Brass", "Silver", "Bronze", "Steel", "Golden", "Obsidian", "Diamond"];
 var types = [["Sword", 1], ["Dagger", 0.5], ["Mace", 1.5]];
 var craft = [["",0],["Pointy ",0.1],["Broken ",-0.2],["Rusty ",-0.1],["Chipped ",-0.1]];
-var magic = ["Bleeding", "Swinging"]
-var magicmods = [
-  [["Mundane ",0,0],["Vigorous ",0.2,0],["Enduring ",0,0.2],["Ephemeral ",0,-0.2],["Lethargic ",-0.2,0],["Minor ",-0.1,-0.1],["Major ",0.1,0.1]],//first number modifies damage, second modifies duration
-  [["Mundane ",0],["Labored ",0.2],["Clumsy ",0.15],["Awkward ",0.1],["Annoying ",0.05],["Minor ",-0.05],["Rapid ",-0.1],["Heightened ",-0.1],["Major ",-0.15],["Extreme ",-0.2]]
+var magic = ["Bleeding", "Swinging", "Lightning"]
+var magicmods = [//each sublist is for each magic type (bleeding, etc)
+  [["Mundane ",0,0],["Vigorous ",0.2,0],["Enduring ",0,0.2],["Ephemeral ",0,-0.2],["Lethargic ",-0.2,0],["Minor ",-0.1,-0.1],["Major ",0.1,0.1],["Extreme ",0.15,0.15]],//first number modifies damage, second modifies duration (all %)
+  [["Mundane ",0],["Labored ",0.2],["Clumsy ",0.15],["Awkward ",0.1],["Annoying ",0.05],["Minor ",-0.05],["Rapid ",-0.1],["Heightened ",-0.1],["Major ",-0.15],["Extreme ",-0.2]],//first num mod swing speed (%)
+  [["Mundane ",0,0],["Disappointing ",-0.15,-0.15],["Weak ",-0.2,0],["Ephemeral ",0,-0.2],["Minor ",-0.1,-0.1],["Major ",0.1,0.1],["Enduring ",0,0.2],["Supercharged ",0.2,0],["Extreme ",0.15,0.15]],//same as first line
 ];
 class Item {
   constructor(desc,whose,name,id="",quest = null) {
@@ -87,6 +88,7 @@ class Weapon extends Item {
       typenum: 0,
       swingmod: 0,
       dammod: 0,
+      damcolor: "red",
     }
     if (name == "handz") {
       this.name = "handz"
@@ -98,11 +100,11 @@ class Weapon extends Item {
       this.type = randint(0,types.length-1);
       this.swing = this.baseswing = types[this.type][1];
       this.craft = randint(0,craft.length-1);
-      if (randint(0,3) < 10) {
-        var typenum = randint(0,magic.length-1)
+      if (randint(0,3) == 3) {//chance weapon gets an enchant
+        var typenum = 2//randint(0,magic.length-1);//change this to specify which enchant a weapon gets
         var type = magic[typenum];
         var mod = randlist(magicmods[typenum]);
-        if (type == "Bleeding") {
+        if (type == "Bleeding" || type == "Lightning") {
           this.status = {
             induces: true,
             name: " of " + mod[0] + type,
@@ -114,12 +116,20 @@ class Weapon extends Item {
             alpha: .75 + .125*(mod[1]+mod[2]),
             dammod: 0,
             swingmod: 0,
+            damcolor: "red",
+          }
+          if (type == "Lightning") {
+            this.status.duration = (180*(1+mod[2])).toFixed(0);
+            this.status.damcolor = "blue";
           }
         }
         else if (type == "Swinging") {
           this.status.name = " of " + mod[0] + type;
           this.status.typenum = typenum+1;
           this.swing = (this.swing*(mod[1]+1)).toFixed(2);
+        }
+        else {
+          console.log("Something went wrong with item magic generation.  Sorry.")
         }
       }
       this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0] + this.status.name;
