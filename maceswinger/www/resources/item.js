@@ -5,7 +5,7 @@ var magic = ["Bleeding", "Swinging", "Lightning"]
 var magicmods = [//each sublist is for each magic type (bleeding, etc)
   [["Mundane ",0,0],["Vigorous ",0.2,0],["Enduring ",0,0.2],["Ephemeral ",0,-0.2],["Lethargic ",-0.2,0],["Minor ",-0.1,-0.1],["Major ",0.1,0.1],["Extreme ",0.15,0.15]],//first number modifies damage, second modifies duration (all %)
   [["Mundane ",0],["Labored ",0.2],["Clumsy ",0.15],["Awkward ",0.1],["Annoying ",0.05],["Minor ",-0.05],["Rapid ",-0.1],["Heightened ",-0.1],["Major ",-0.15],["Extreme ",-0.2]],//first num mod swing speed (%)
-  [["Mundane ",0,0],["Disappointing ",-0.15,-0.15],["Weak ",-0.2,0],["Ephemeral ",0,-0.2],["Minor ",-0.1,-0.1],["Major ",0.1,0.1],["Enduring ",0,0.2],["Supercharged ",0.2,0],["Extreme ",0.15,0.15]],//same as first line
+  [["Mundane ",0,0],["Disappointing ",-0.15,-0.15],["Feeble ",-0.2,0],["Ephemeral ",0,-0.2],["Minor ",-0.1,-0.1],["Major ",0.1,0.1],["Enduring ",0,0.2],["Supercharged ",0.2,0],["Extreme ",0.15,0.15]],//same as first line
 ];
 class Item {
   constructor(desc,whose,name,id="",quest = null) {
@@ -134,7 +134,13 @@ class Weapon extends Item {
       }
       this.name = craft[this.craft][0] + materials[this.lv] + " " + types[this.type][0] + this.status.name;
     }
-    this.dam = ((this.lv*2 + 4)*(craft[this.craft][1]+1)*(this.status.dammod+1)*Math.pow(this.baseswing,1.075)).toFixed(2);
+    if (whose == "player") {
+      this.swing = (this.swing * p.mods.swing).toFixed(2)//mod swing b/c player traits
+      this.dam = ((this.lv*2 + 4)*(craft[this.craft][1]+1)*(this.status.dammod+1)*Math.pow(this.baseswing,1.075)*p.mods.melee).toFixed(2);
+    }
+    else {
+      this.dam = ((this.lv*2 + 4)*(craft[this.craft][1]+1)*(this.status.dammod+1)*Math.pow(this.baseswing,1.075)).toFixed(2);
+    }
     this.damps = (this.dam/this.swing).toFixed(2);
     this.img = new Image(64,128);
     ctxchange.drawImage(weapsimg, this.lv * 16,8 + this.type*32,16,32,0,0,64,128); //base weapon image

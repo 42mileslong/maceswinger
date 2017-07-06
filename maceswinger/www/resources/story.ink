@@ -31,15 +31,22 @@ EXTERNAL refreshlines()
 EXTERNAL getinkquest(which)
 EXTERNAL takeinkquest(which)
 EXTERNAL endquest(which)
+EXTERNAL creationstats()
 
 -> init
 === init ===
 {~Hello there!|Hey, you! Yeah, you. The one sitting that the computer!|Greetings!} Welcome to the magical land of Magicland, a land of magic and land! You are an adventurer {~primed|ready} for adventure, armed only with your {~wits|arms} and your bare handz (in that order). You can barely make out the entrance to the dungeon behind you, but that doesn't matter as you prepare to embark on adventure!
     *   Yes!
     *   [Yes.]Yes!!!!
-    -   Great!  You just woke up in a dungeon.  Oh no.
-    -> move
-
+    -   Great!  You just woke up in a dungeon.  Oh no. But first let's figure out a bit more about you.
+    *   [Ok.]
+        ~ creationstats()
+        -> END
+===aftercreation===
+Looks good! To repeat, you've woken up in a dungeon.
+    *   Oh no.
+        -> move
+    
 === move ===
 {~You continue {~walking|trudging|ambling|sauntering|strolling} through {curlocationname}|As you {~walk|trudge|amble|saunter|stroll} through {curlocationname} you {~jump|twitch|shriek|squeal} {~at each {~spooky|scary} noise|as additional cobwebs accumulate on your {~face|arms|legs}}|{~The dungeon echoes|Bats fly out of hidden crevices in the ceiling|The {~walls|floor|ceiling} seem to grow more and more {~damp|slimy}} with each step you take}.
 {current_lvl == 0:
@@ -60,7 +67,6 @@ EXTERNAL endquest(which)
             ~ fight("normal")
             -> DONE
         }
-        -> move
         -> move
     +   {current_lvl == deepest_lvl} What's that?
         -> boss

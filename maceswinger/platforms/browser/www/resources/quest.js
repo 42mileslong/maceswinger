@@ -1,3 +1,5 @@
+//This is a huge mess
+
 var difficulty_names = ["Trivial", "Ordinary", "Noteworthy", "Epic", "Heroic", "Ledgendary"];
 var names_first = ["Tim", "John", "Will", "Gregory", "Isaac", "Jimmy", "Chris", "David"] //temp
 var names_last = ["Newton", "Smith", "Mendel", "Wu"] //temp

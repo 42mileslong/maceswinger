@@ -42,7 +42,7 @@
     <!-- Panels overlay-->
     <div class="panel-overlay"></div>
     <!-- Left panel with reveal effect-->
-    <div class="panel panel-left panel-reveal">
+    <div class="panel panel-left panel-reveal" id="leftpanel">
         <div data-page="index" class="page navbar-fixed">
           <div class="navbar">
             <div class="navbar-inner">
@@ -74,7 +74,7 @@
                   </div>-->
         </div>
       </div>
-      <div class="panel panel-right panel-reveal" style="">
+      <div class="panel panel-right panel-reveal" style="" id="rightpanel">
           <div data-page="index" class="page navbar-fixed" style="">
             <div class="navbar">
               <div class="navbar-inner">
@@ -118,7 +118,7 @@
                     </div>
                     <div class="center sliding">Mace Swinger</div>
                     <div class="right">
-                      <a href="#" class="icon-only open-panel" data-panel="right"><i class="icon icon-bars" id=""></i></a>
+                      <a href="#" class="icon-only open-panel" data-panel="right"><i class="icon icon-bars"></i></a>
                     </div>
                 </div>
             </div>
@@ -170,8 +170,9 @@
     <script src="resources/map.js"></script>
     <script src="resources/quest.js"></script>
     <script>
-      //https://github.com/TheBerkin/Rant maybe use this?
+      //bind external story functions and create needed story variables
       var story = new inkjs.Story(storyContent);
+      story.BindExternalFunction("creationstats", function() { printcreationstats() });
       story.BindExternalFunction("fight", function(type = "normal") { p.setstate("fight",type) });
       story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
       story.BindExternalFunction("travel", function(direction) {p.move(direction)});
@@ -192,6 +193,8 @@
       story.BindExternalFunction("takeinkquest", function(quest) {gamemap.curfeature().quests[quest-1].take();});
       story.BindExternalFunction("endquest", function(quest) {gamemap.curfeature().quests[quest-1].endquest();});
       var storyContainer = document.querySelectorAll('#story')[0];
+
+      //create image variables
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";
       var weapsimg = new Image();
@@ -204,6 +207,8 @@
       slider.src = "resources/slider.png";
       var damnums = new Image();
       damnums.src = "resources/damnums.png";
+
+      //random global variables
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -227,6 +232,9 @@
       });
       var curquestindex = 0;
       var gamemap = null;
+      var combatpaused = false;
+
+      //start game once page loaded
       window.onload = function() {
         resize();
         init();
