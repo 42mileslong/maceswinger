@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://ajax.googleapis.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://ajax.googleapis.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; connect-src 'self' ws://10.0.1.201:3000 ws://192.168.1.116:3000 ws://127.0.0.1:3000/">
 
 
     <!-- Required meta tags-->
@@ -42,18 +42,30 @@
     <!-- Panels overlay-->
     <div class="panel-overlay"></div>
     <!-- Left panel with reveal effect-->
-    <div class="panel panel-left panel-reveal">
+    <div class="panel panel-left panel-reveal" id="leftpanel">
         <div data-page="index" class="page navbar-fixed">
           <div class="navbar">
             <div class="navbar-inner">
               <div class="left"></div>
-              <div class="center">Inventory</div>
+              <div class="center">
+                <div class="buttons-row" width="300px">
+                  <a href="#weaponitempage" class="tab-link active button">&nbsp;&nbsp;Weapons...&nbsp;&nbsp;</a>
+                  <a href="#questitempage" class="tab-link button">Quest Items...</a>
+                </div>
+              </div>
               <div class="right"></div>
             </div>
           </div>
           <div class="page-content">
-            <div id = "eqweap" style="background-color:purple"></div>
-            <div id = "invw"></div>
+            <div class="tabs-animated-wrap">
+              <div class="tabs">
+                <div id="weaponitempage" class="tab active">
+                  <div id = "eqweap" style="background-color:purple"></div>
+                  <div id = "invw"></div>
+                </div>
+                <div id="questitempage" class="tab"></div>
+              </div>
+            </div>
           </div>
                 <!--<div class="card weapselected">
                   <div class = "card-header">Meme</div>
@@ -62,6 +74,30 @@
                   </div>-->
         </div>
       </div>
+      <div class="panel panel-right panel-reveal" style="" id="rightpanel">
+          <div data-page="index" class="page navbar-fixed" style="">
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"></div>
+                <div class="center" width="300px">
+                  <div class="buttons-row" width="300px">
+                    <a href="#questpage" class="tab-link active button">&nbsp;Quests...</a>
+                    <a href="#statspage" class="tab-link button">&nbsp;&nbsp;Stats...&nbsp;&nbsp;</a>
+                  </div>
+                </div>
+                <div class="right"></div>
+              </div>
+            </div>
+            <div class="page-content">
+              <div class="tabs-animated-wrap">
+                <div class="tabs">
+                  <div id="questpage" class="tab active"></div>
+                  <div id="statspage" class="tab"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
   </div>
 
 
@@ -78,9 +114,12 @@
                           Right link contains only icon - additional "icon-only" class
                           Additional "open-panel" class tells app to open panel when we click on this link
                         -->
-                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars" id="invicon"></i></a>
+                        <a href="#" class="icon-only open-panel" data-panel="left"><i class="icon icon-bars" id="invicon"></i></a>
                     </div>
                     <div class="center sliding">Mace Swinger</div>
+                    <div class="right">
+                      <a href="#" class="icon-only open-panel" data-panel="right"><i class="icon icon-bars"></i></a>
+                    </div>
                 </div>
             </div>
             <!-- Pages container, because we udse fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -90,16 +129,19 @@
                     <!-- Scrollable page content -->
                   <div class="page-content" id="main">
                     <div id="story" class="container">
-                        <h1>story</h1>
+                        <h1>Mace Swinger</h1>
                     </div>
                     <div class="content-block" id="fight">
                         <canvas id="screen" style="margin:auto;display:block"></canvas>
-                        <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Hit</a>
-                        <p><span data-progress="0" style="width:50%;margin:auto"class="progressbar" id="expbar"></span>
+                        <p><a href="#" type="button" class = "mashbut" id="dodge" onclick = "dodgestart()">Dodge</a><a href="#" class="mashbut" type="button" id="hit" onclick = "hitstart()">Swing</a>
+                        <p><br />
+                        <span data-progress="100" style="width:50%;margin:auto"class="progressbar color-red" id="healthbar"></span>
+                        <span data-progress="0" style="width:50%;margin:auto"class="progressbar" id="expbar"></span>
                         <div class="chip" style="">
                           <div class="chip-label" id="plv" style="width:0%;margin:auto">1</div>
                         </div>
                         <canvas id="changer" width="64" height="128" hidden></canvas>
+                        <canvas id="mapchanger" width="320" height="320" hidden></canvas>
                     </div>
                   </div>
                 </div>
@@ -114,27 +156,59 @@
             </div>-->
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> jquery online-->
+    <script src="js/jquery.min.js"></script> <!-- jquery offline -->
     <script src="cordova.js"></script>
     <script src="lib/framework7/js/framework7.min.js"></script>
     <script src="js/my-app.js"></script>
     <script src="resources/player.js"></script>
-    <script src="resources/weapon.js"></script>
     <script src="resources/enemy.js"></script>
     <script src="resources/game.js"></script>
     <script src="resources/ink.js"></script>
     <script src="resources/story.js"></script>
+    <script src="resources/item.js"></script>
+    <script src="resources/map.js"></script>
+    <script src="resources/quest.js"></script>
     <script>
-      //https://github.com/TheBerkin/Rant maybe use this?d
+      //bind external story functions and create needed story variables
       var story = new inkjs.Story(storyContent);
-      story.BindExternalFunction("fight", function() { p.setstate("fight") });
+      story.BindExternalFunction("creationstats", function() { printcreationstats() });
+      story.BindExternalFunction("fight", function(type = "normal") { p.setstate("fight",type) });
+      story.BindExternalFunction("displaymap", function() { gamemap.display("story") });
+      story.BindExternalFunction("travel", function(direction) {p.move(direction)});
+      story.BindExternalFunction("bossfight", function(way) {gamemap.curfeature().bosslevel = way});
+      story.BindExternalFunction("nextprompt", function(quest,much) {return gamemap.curfeature().quests[quest-1].nextprompt(true,much);});
+      story.BindExternalFunction("contprompts", function(quest) {return gamemap.curfeature().quests[quest-1].contprompts();});
+      story.BindExternalFunction("getinkquest", function(quest) {
+        if (gamemap.curfeature().quests[quest-1].stage == -1)
+          story.variablesState["curqueststart"] = "start";
+        else if (gamemap.curfeature().quests[quest-1].stage == gamemap.curfeature().quests[quest-1].stages.length-1) {
+          story.variablesState["curqueststart"] = "end";
+        }
+        else {
+          story.variablesState["curqueststart"] = "middle";
+        }
+        return gamemap.curfeature().quests[quest-1].questpattern;
+      });
+      story.BindExternalFunction("takeinkquest", function(quest) {gamemap.curfeature().quests[quest-1].take();});
+      story.BindExternalFunction("endquest", function(quest) {gamemap.curfeature().quests[quest-1].endquest();});
       var storyContainer = document.querySelectorAll('#story')[0];
+
+      //create image variables
       var enemiesimg = new Image();
       enemiesimg.src = "resources/enemies.png";
       var weapsimg = new Image();
       weapsimg.src = "resources/weapons.png";
       var healthbar = new Image();
       healthbar.src = "resources/healthbar.png";
+      var tiles = new Image();
+      tiles.src = "resources/tiles/mapicons.png";
+      var slider = new Image();
+      slider.src = "resources/slider.png";
+      var damnums = new Image();
+      damnums.src = "resources/damnums.png";
+
+      //random global variables
       var dodgebut = document.getElementById("dodge");
       var hitbut = document.getElementById("hit");
       var size = {
@@ -143,105 +217,28 @@
       }
       var canvas = document.getElementById('screen');
       var ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.oImageSmoothingEnabled = false;
+      ctx.webkitImageSmoothingEnabled = false;
       var change = document.getElementById("changer");
       var ctxchange = change.getContext("2d");
+      var mapchange = document.getElementById("mapchanger");
+      var ctxmapchange = mapchange.getContext("2d");
       var p = new player();
       var curen = new enemy(0,randlist(["an","bn","am","bm"]));
       var myApp = new Framework7({
-          swipePanel: 'left'
+          swipePanel: 'both',
       });
-      resize();
-      ctx.font = "30px Arial";
-      ctxchange.webkitImageSmoothingEnabled = false;
-      ctxchange.mozImageSmoothingEnabled = false;
-      ctxchange.imageSmoothingEnabled = false;
-      function randint(min, max) {
-      	min = Math.ceil(min);
-      	max = Math.floor(max);
-      	return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-      function randlist(list) {
-        return list[randint(0, list.length - 1)];
-      }
-      function dodgeend() {
-        $("#dodge").removeClass("mashbut-reloading");
-        settransition(0.01,"dodge");
-        if (p.state == "fight") {
-          $("#dodge").removeAttr("disabled");
-        }
-        //document.getElementById("dodge").innerHTML += "1";
-      }
-      function hitend() {
-        $("#hit").removeClass("mashbut-reloading");
-        settransition(0.01,"hit");
-        if (p.state == "fight") {
-          $("#hit").removeAttr("disabled");
-        }
-      }
-      function dodgestart() {
-        $("#dodge").attr("disabled","disabled");
-        $("#dodge").addClass("mashbut-reloading");
-        settransition(p.weap.swing,"dodge");
-        setTimeout(dodgeend,1000*p.weap.swing);
-      }
-      function hitstart() {
-        $("#hit").attr("disabled","disabled");
-        $("#hit").addClass("mashbut-reloading");
-        p.hit(curen);
-        settransition(p.weap.swing,"hit");
-        setTimeout(hitend,1000*p.weap.swing);
-      }
-      function resize() {
-        size = {
-          w: document.documentElement.clientWidth,
-          h: document.documentElement.clientHeight
-        }
-        ctx.canvas.width = size.w*.75;
-        ctx.canvas.height = size.h - 410;
-        ctx.webkitImageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.imageSmoothingEnabled = false;
-      }
-      function invover(way) {
-        var ico = document.getElementById("invicon");
-        if (way) {
-          $(ico).addClass("color-red");
-          var idd = "temp";
-          var iddd = "temp2";
-          addelement(document.getElementById("main"),"div","card",idd,null,"width:260px;position:absolute");
-          document.getElementById(idd).style.left = size.w/2-135 + "px";
-          document.getElementById(idd).style.top = size.h*1/3 + "px";
-          addelement(document.getElementById(idd),"div","card-header",idd + "head","Inventory Full!");
-          addelement(document.getElementById(idd),"div","card-content",iddd);
-          addelement(document.getElementById(iddd),"div","card-content-inner",null,"Drop an item from your inventory or<a href='#' class='button' style='height:100%' id='tempdrop'>Drop Lowest DPS Item</a>");
-          $("#tempdrop").click(function() {
-            p.droplowest();
-          });
-        }
-        else {
-          $(ico).removeClass("color-red");
-          document.getElementById("temp").remove();
-          p.setstate("story");
-        }
-      }
-      function togglescreen(way) {
-        if (way == "story") {
-          $("#fight").hide({duration:0});
-          $("#story").show({duration:0,easing:"linear"});
-          document.getElementById("inkstyle").disabled = undefined;
-          document.getElementById("main").style.overflow = "scroll";
-        }
-        else if (way == "fight") {
-          $("#story").hide({duration:0})
-          $("#fight").show({duration:0,easing:"linear"})
-          document.getElementById("inkstyle").disabled = "disabled";
-          document.getElementById("main").style.overflow = "hidden";
-        }
-        else {
-          console.log("error in switching screen");
-        }
-      }
-      init();
+      var curquestindex = 0;
+      var gamemap = null;
+      var combatpaused = false;
+
+      //start game once page loaded
+      window.onload = function() {
+        resize();
+        init();
+      };
     </script>
 </body>
 
